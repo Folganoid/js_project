@@ -1,0 +1,51 @@
+version: '3.3'
+services:
+
+    nginx:
+        image: nginx:1.14.2
+        ports:
+            - "3001:3001"
+            - "3002:3002"
+            - "443:443"
+        volumes:
+            - ./Nginx/core:/etc/nginx/conf.d
+            - ./Nginx/www:/var/www/
+            - ./Nginx/www2:/var/www2/
+            - ./Nginx/Logs:/var/log/nginx/
+            - ./Nginx/html:/usr/share/nginx/html/
+        links:
+            - php
+
+    mysql:
+
+        image: mysql:5.7
+
+        ports:
+            - "3306:3306"
+        environment:
+
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=temp
+            - MYSQL_USER=temp
+            - MYSQL_PASSWORD=temp
+        volumes:
+            - ./MySQL:/var/lib/mysql
+
+
+    php:
+        build: ./PHP
+        volumes:
+            - ./Nginx/www:/var/www
+
+        links:
+            - mysql
+
+    nodejs:
+        build: ./nodejs
+        environment:
+           - NODE_ENV=production
+        volumes:
+           - ./nodejs:/var/www2
+        command: npm start
+        ports:
+           - 3000:3000
