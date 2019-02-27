@@ -4,6 +4,7 @@ namespace App\DataFixtures;
 
 use App\Entity\Token;
 use App\Entity\User;
+use App\Service\TokenService;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Validator\Constraints\DateTime;
@@ -19,6 +20,8 @@ class AppFixtures extends Fixture
         $refreshTokenTime = \DateTime::createFromFormat('U', time() + 86400 * 30 );
         $refreshTokenTime->setTimezone(new \DateTimeZone('UTC'));
 
+        $tokenService = new TokenService();
+
         // user1
         $user = new User();
         $user->setEmail("test@test.test");
@@ -30,7 +33,7 @@ class AppFixtures extends Fixture
 
         $token = new Token();
         $token->setType("access");
-        $token->setToken("aaaaaa");
+        $token->setToken($tokenService->generateToken());
         $token->setFinishAt($accessTokenTime);
         $token->setUserId($user->getId());
         $manager->persist($token);
@@ -38,7 +41,7 @@ class AppFixtures extends Fixture
 
         $token = new Token();
         $token->setType("refresh");
-        $token->setToken("bbb");
+        $token->setToken($tokenService->generateToken());
         $token->setFinishAt($refreshTokenTime);
         $token->setUserId($user->getId());
         $manager->persist($token);
@@ -55,7 +58,7 @@ class AppFixtures extends Fixture
 
         $token = new Token();
         $token->setType("access");
-        $token->setToken("aaaaaa");
+        $token->setToken($tokenService->generateToken());
         $token->setFinishAt($accessTokenTime);
         $token->setUserId($user->getId());
         $manager->persist($token);
@@ -63,7 +66,7 @@ class AppFixtures extends Fixture
 
         $token = new Token();
         $token->setType("refresh");
-        $token->setToken("bbb");
+        $token->setToken($tokenService->generateToken());
         $token->setFinishAt($refreshTokenTime);
         $token->setUserId($user->getId());
         $manager->persist($token);
