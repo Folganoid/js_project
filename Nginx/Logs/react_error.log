@@ -1,0 +1,3 @@
+2019/03/02 16:34:25 [error] 6#6: *1 open() "/var/www2/favicon.ico" failed (2: No such file or directory), client: 172.18.0.1, server: react.dev, request: "GET /favicon.ico HTTP/1.1", host: "localhost:3002", referrer: "http://localhost:3002/"
+2019/03/02 19:10:32 [error] 6#6: *8 open() "/var/www2/token/generate" failed (2: No such file or directory), client: 172.18.0.1, server: react.dev, request: "GET /token/generate HTTP/1.1", host: "localhost:3002"
+2019/03/02 19:11:01 [error] 6#6: *8 open() "/var/www2/token/generate" failed (2: No such file or directory), client: 172.18.0.1, server: react.dev, request: "POST /token/generate HTTP/1.1", host: "localhost:3002"

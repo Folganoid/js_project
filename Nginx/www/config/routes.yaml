@@ -1,3 +1,13 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+token_generate:
+  path:     /token/generate
+  methods:    [POST]
+  controller: 'App\Controller\TokenController::generateTokenAction'
+
+token_refresh:
+  path:     /token/refresh
+  methods:    [PUT]
+  controller: 'App\Controller\TokenController::refreshTokenAction'

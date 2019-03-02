@@ -26,7 +26,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail("test@test.test");
         $user->setLogin("test");
-        $user->setPassword("test");
+        $user->setPassword($tokenService->generatePass("test"));
         $user->setRole("admin");
         $manager->persist($user);
         $manager->flush();
@@ -51,7 +51,7 @@ class AppFixtures extends Fixture
         $user = new User();
         $user->setEmail("test2@test2.test2");
         $user->setLogin("test2");
-        $user->setPassword("test2");
+        $user->setPassword($tokenService->generatePass("test2"));
         $user->setRole("user");
         $manager->persist($user);
         $manager->flush();
