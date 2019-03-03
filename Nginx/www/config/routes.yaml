@@ -11,3 +11,8 @@ token_refresh:
   path:     /token/refresh
   methods:    [PUT]
   controller: 'App\Controller\TokenController::refreshTokenAction'
+
+home:
+  path:     /
+  methods:    [GET]
+  controller: 'App\Controller\HomeController::homeAction'

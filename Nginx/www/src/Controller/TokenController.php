@@ -53,6 +53,7 @@ class TokenController extends AbstractController
         $manager = $this->getDoctrine()->getManager();
         $tokens = (new TokenService())->refreshTokens($refresh, $manager);
 
+        if (isset($tokens["error"])) return (new ResponseService())->buildErrorResponse(404, $tokens["error"]);
         return (new ResponseService())->buildOkResponse($tokens);
     }
 }

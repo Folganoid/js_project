@@ -12,6 +12,7 @@ use App\Entity\Token;
 use App\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Request;
 
 class TokenService
 {
@@ -87,6 +88,24 @@ class TokenService
         if (!$user) return ["error" => "User not found..."];
         return $this->newTokens($user, $manager);
 
+    }
+
+    /**
+     * get user by token
+     *
+     * @param string $access
+     * @param EntityManager $manager
+     * @return User
+     */
+    public function getUserByAccessToken(string $access, EntityManager $manager): User
+    {
+        $token = $manager->getRepository(Token::class)->findOneBy(["token" => $access, "type" => "access"]);
+        if (!$token) return new User();
+        if (time() > $token->getFinishAt()->getTimestamp()) return new User();
+
+        $user = $manager->getRepository(User::class)->findOneBy(["id" => $token->getUserId()]);
+        if (!$user) return new User();
+        return $user;
     }
 
 }
