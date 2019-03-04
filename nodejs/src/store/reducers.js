@@ -1,18 +1,8 @@
-import {ACTION_CHANGE_LOGIN, ACTION_CHANGE_PASSWORD} from "../mainRouter";
+import {combineReducers} from "redux";
+import {loginReducer} from "./login/reducers";
+import {registrationReducer} from "./registration/reducers";
 
-const initialState = {
-    login: "",
-    password: ""
-};
-
-export const rootReducer = (state = initialState, action) => {
-
-    switch (action.type) {
-        case ACTION_CHANGE_LOGIN:
-            return {...state, login: action.payload};
-        case ACTION_CHANGE_PASSWORD:
-            return {...state, password: action.payload};
-    }
-
-    return state;
-};
+export default combineReducers({
+    login: loginReducer,
+    registration: registrationReducer
+});
