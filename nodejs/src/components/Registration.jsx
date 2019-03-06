@@ -8,31 +8,28 @@ class Registration extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onLoginChange = this.onLoginChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.onPassword2Change = this.onPassword2Change.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+
     }
 
-    onLoginChange(event) {
-        this.props.setLogin(event.target.value)
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = "set" + target.name;
+
+        this.props[name](value);
     }
 
-    onPasswordChange(event) {
-        this.props.setPassword(event.target.value)
-    }
-
-    onPassword2Change(event) {
-        this.props.setPassword2(event.target.value)
-    }
     render() {
 
-        const {login, password, password2} = this.props;
+        const {login, password, password2, email} = this.props;
 
         return <div>
             <div>
                 <input
                     value={this.props.login}
-                    onChange={this.onLoginChange}
+                    name="Login"
+                    onChange={this.handleInputChange}
                     type="text"
                     placeholder="Login"
 
@@ -40,8 +37,19 @@ class Registration extends React.Component {
             </div>
             <div>
                 <input
+                    value={this.props.email}
+                    name="Email"
+                    onChange={this.handleInputChange}
+                    type="text"
+                    placeholder="Email"
+
+                />
+            </div>
+            <div>
+                <input
                     value={this.props.password}
-                    onChange={this.onPasswordChange}
+                    name="Password"
+                    onChange={this.handleInputChange}
                     type="text"
                     placeholder="Password"
 
@@ -50,14 +58,17 @@ class Registration extends React.Component {
             <div>
                 <input
                     value={this.props.password2}
-                    onChange={this.onPassword2Change}
+                    name="Password2"
+                    onChange={this.handleInputChange}
                     type="text"
-                    placeholder="Password2"
+                    placeholder="Confirm password"
 
                 />
             </div>
+
             <div>
                 {login}
+                {email}
                 {password}
                 {password2}
             </div>

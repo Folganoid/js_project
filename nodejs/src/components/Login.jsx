@@ -8,16 +8,15 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.onLoginChange = this.onLoginChange.bind(this);
-        this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
     }
 
-    onLoginChange(event) {
-        this.props.setLogin(event.target.value)
-    }
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.value;
+        const name = "set" + target.name;
 
-    onPasswordChange(event) {
-        this.props.setPassword(event.target.value)
+        this.props[name](value);
     }
 
     render() {
@@ -28,7 +27,8 @@ class Login extends React.Component {
             <div>
                 <input
                     value={this.props.login}
-                    onChange={this.onLoginChange}
+                    name="Login"
+                    onChange={this.handleInputChange}
                     type="text"
                     placeholder="Login"
                 />
@@ -36,7 +36,8 @@ class Login extends React.Component {
             <div>
                 <input
                     value={this.props.password}
-                    onChange={this.onPasswordChange}
+                    name="Password"
+                    onChange={this.handleInputChange}
                     type="text"
                     placeholder="Password"
                 />

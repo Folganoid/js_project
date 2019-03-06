@@ -1,4 +1,5 @@
 export const REGISTRATION_CHANGE_LOGIN = 'REGISTRATION_CHANGE_LOGIN';
+export const REGISTRATION_CHANGE_EMAIL = 'REGISTRATION_CHANGE_EMAIL';
 export const REGISTRATION_CHANGE_PASSWORD = 'REGISTRATION_CHANGE_PASSWORD';
 export const REGISTRATION_CHANGE_PASSWORD2 = 'REGISTRATION_CHANGE_PASSWORD2';
 
@@ -6,6 +7,13 @@ export const setLogin = (newLogin) => {
     return {
         type: REGISTRATION_CHANGE_LOGIN,
         payload: newLogin
+    }
+};
+
+export const setEmail = (newEmail) => {
+    return {
+        type: REGISTRATION_CHANGE_EMAIL,
+        payload: newEmail
     }
 };
 
