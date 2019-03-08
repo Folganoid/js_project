@@ -56,4 +56,5 @@ class TokenController extends AbstractController
         if (isset($tokens["error"])) return (new ResponseService())->buildErrorResponse(404, $tokens["error"]);
         return (new ResponseService())->buildOkResponse($tokens);
     }
+
 }

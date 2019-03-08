@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {BrowserRouter as Router, Link, Route, Switch} from 'react-router-dom';
-import {createStore, bindActionCreators} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
 import rootReducer from "./store/reducers";
 import {Provider} from 'react-redux'
 
@@ -12,14 +12,32 @@ import SETUP from './config';
 import LoginContainer from "./components/LoginContainer";
 import RegistrationContainer from "./components/RegistrationContainer";
 
-const store = createStore(rootReducer);
+// middleware
+const logger = store => next => action => {
+    console.log(store.getState());
+    next(action)
+};
+
+// store
+const store = createStore(rootReducer,
+    localStorage['redux-store'] ? JSON.parse(localStorage['redux-store']) : {},
+    applyMiddleware(logger)
+);
+
+// save store to localStorage
+store.subscribe(() => {
+    localStorage['redux-store'] = JSON.stringify(store.getState());
+});
+
 
 /**
  *  Router and navbar
  */
 class MainRouter extends Component {
 
+
     render() {
+
         return (
             <Router>
                 <Provider store={store}>
