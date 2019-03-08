@@ -100,11 +100,23 @@ class TokenService
     public function getUserByAccessToken(string $access, EntityManager $manager): User
     {
         $token = $manager->getRepository(Token::class)->findOneBy(["token" => $access, "type" => "access"]);
-        if (!$token) return new User();
-        if (time() > $token->getFinishAt()->getTimestamp()) return new User();
+        if (!$token) {
+            $user = new User();
+            $user->setRole("404");
+            return $user;
+        }
+        if (time() > $token->getFinishAt()->getTimestamp()) {
+            $user = new User();
+            $user->setRole("401");
+            return $user;
+        }
 
         $user = $manager->getRepository(User::class)->findOneBy(["id" => $token->getUserId()]);
-        if (!$user) return new User();
+        if (!$user) {
+            $user = new User();
+            $user->setRole("404");
+            return $user;
+        }
         return $user;
     }
 

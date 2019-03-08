@@ -16,7 +16,10 @@ class HomeController extends MainController
         return $responseService->buildOkResponse(["ok" => true]);
     }
 
-
+    public function testAction(Request $request, ResponseService $responseService)
+    {
+        return $responseService->buildOkResponse(["sfsfsf"]);
+    }
 
 
 }

@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\User;
 use App\Service\TokenService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,9 +16,12 @@ class MainController extends AbstractController
         $responseService = new ResponseService();
         $tokenService = new TokenService();
 
-        if (!$accessToken) return $responseService->buildErrorResponse(403, "Invalid access token data...");
+        if (!$accessToken) return $responseService->buildErrorResponse(404, "Invalid access token data...");
+
         $user = $tokenService->getUserByAccessToken($accessToken, $manager);
-        if (!$user->getId()) return $responseService->buildErrorResponse(404, "Invalid or elapsed token...");
+
+        if ($user->getRole() == "404") return $responseService->buildErrorResponse(404, "Invalid access token...");
+        if ($user->getRole() == "401") return $responseService->buildErrorResponse(401, "Access token time elapsed...");
 
         if (!empty($role)) {
             if (!in_array($user->getRole(), $role)) return $responseService->buildErrorResponse(404, "Access denied...");

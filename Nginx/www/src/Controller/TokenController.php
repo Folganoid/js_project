@@ -10,7 +10,6 @@ use App\Service\ResponseService;
 
 class TokenController extends AbstractController
 {
-
     /**
      * generate tokens
      *
@@ -19,8 +18,8 @@ class TokenController extends AbstractController
      */
     public function generateTokenAction(Request $request)
     {
-        $login = $request->headers->get('login');
-        $pass = $request->headers->get('password');
+        $login = $request->headers->get('Login');
+        $pass = $request->headers->get('Password');
 
         if (!$login || strlen($login) == 0 || !$pass || strlen($pass) == 0) {
             return (new ResponseService())->buildErrorResponse(401, "Invalid credentials...");
@@ -47,7 +46,7 @@ class TokenController extends AbstractController
      */
     public function refreshTokenAction(Request $request)
     {
-        $refresh = $request->headers->get('refresh');
+        $refresh = $request->headers->get('Refresh');
         if (!$refresh || strlen($refresh) == 0) return (new ResponseService())->buildErrorResponse(404, "Invalid refresh token data...");
 
         $manager = $this->getDoctrine()->getManager();
@@ -57,4 +56,22 @@ class TokenController extends AbstractController
         return (new ResponseService())->buildOkResponse($tokens);
     }
 
+    /**
+     *
+     */
+    public function checkUserByAccessTokenAction(Request $request) {
+
+        $access = $request->headers->get('Access');
+        $responseService = new ResponseService();
+
+        if (!$access || strlen($access) == 0) return $responseService->buildErrorResponse(404, "Invalid refresh token data...");
+
+        $manager = $this->getDoctrine()->getManager();
+        $user = $this->checkUserByAccessTokenAction($access, $manager);
+
+        if ($user->getRole() == "404") return $responseService->buildErrorResponse(404, "Invalid access token...");
+        if ($user->getRole() == "401") return $responseService->buildErrorResponse(401, "Access token time elapsed...");
+
+
+    }
 }

@@ -16,3 +16,8 @@ home:
   path:     /
   methods:    [GET]
   controller: 'App\Controller\HomeController::homeAction'
+
+test:
+  path:     /test
+  methods:    [POST]
+  controller: 'App\Controller\HomeController::testAction'

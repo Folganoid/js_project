@@ -15,7 +15,8 @@ services:
             - ./Nginx/html:/usr/share/nginx/html/
         links:
             - php
-
+        networks:
+            - webappnetwork
     mysql:
 
         image: mysql:5.7
@@ -30,7 +31,8 @@ services:
             - MYSQL_PASSWORD=temp
         volumes:
             - ./MySQL:/var/lib/mysql
-
+        networks:
+            - webappnetwork
 
     php:
         build: ./PHP
@@ -39,13 +41,23 @@ services:
 
         links:
             - mysql
+        networks:
+            - webappnetwork
 
     nodejs:
         build: ./nodejs
         environment:
            - NODE_ENV=production
+        links:
+           - nginx
         volumes:
            - ./nodejs:/var/www2
         command: npm start
         ports:
            - 3000:3000
+        networks:
+            - webappnetwork
+            
+networks:
+   webappnetwork:
+      driver: bridge

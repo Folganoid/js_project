@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 /**
  * Login
@@ -9,6 +10,7 @@ class Login extends React.Component {
         super(props);
 
         this.handleInputChange = this.handleInputChange.bind(this);
+        this.buttonSubmit = this.buttonSubmit.bind(this);
     }
 
     handleInputChange(event) {
@@ -17,6 +19,22 @@ class Login extends React.Component {
         const name = "set" + target.name;
 
         this.props[name](value);
+    }
+
+    buttonSubmit() {
+
+        var headers = {
+            'Login': this.props.login,
+            'Password': this.props.password,
+        };
+        axios.post("http://127.0.0.1:3001/token/generate", "", {headers: headers})
+
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     render() {
@@ -42,6 +60,7 @@ class Login extends React.Component {
                     placeholder="Password"
                 />
             </div>
+            <button onClick={this.buttonSubmit}>Submit</button>
             <div>
                 {login}
                 {password}
