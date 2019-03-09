@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import {Redirect} from "react-router-dom";
 
 /**
  * Login
@@ -8,6 +9,8 @@ class Login extends React.Component {
 
     constructor(props) {
         super(props);
+
+        this.state = { redirect: false };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.buttonSubmit = this.buttonSubmit.bind(this);
@@ -30,9 +33,18 @@ class Login extends React.Component {
         axios.post("http://127.0.0.1:3001/token/generate", "", {headers: headers})
 
             .then((response) => {
+                localStorage.clear();
+                if (response['data']["accessToken"] && response['data']["refreshToken"]) {
+                    this.props.setUserLogin(headers.Login);
+                    this.props.setUserAccess(response['data']["accessToken"]);
+                    this.props.setUserRefresh(response['data']["refreshToken"]);
+                    this.setState({redirect: true});
+                }
+
                 console.log(response);
             })
             .catch((error) => {
+                localStorage.clear();
                 console.log(error);
             })
     }
@@ -40,6 +52,9 @@ class Login extends React.Component {
     render() {
 
         const {login, password} = this.props;
+        const userLogin = this.props.userLogin;
+
+        if (this.state.redirect) return <div><Redirect to="/" /></div>;
 
         return <div>
             <div>
@@ -64,6 +79,7 @@ class Login extends React.Component {
             <div>
                 {login}
                 {password}
+                {userLogin}
             </div>
         </div>
     }

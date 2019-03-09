@@ -1,12 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MainRouter from './mainRouter';
-
-function reducer(state, action) {
-
-}
+import App from './App';
 
 ReactDOM.render(
-    <MainRouter/>,
+    <App/>,
     document.getElementById('root')
 );

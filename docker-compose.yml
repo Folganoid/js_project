@@ -58,6 +58,22 @@ services:
         networks:
             - webappnetwork
             
+    s3server:
+       image: scality/s3server:latest
+       container_name: s3server
+       restart: unless-stopped
+       ports:
+          - "8000:8000"
+       volumes:
+          - ./S3/s3data:/usr/src/app/localData
+          - ./S3/s3metadata:/usr/src/app/localMetadata
+       environment:
+          - SCALITY_ACCESS_KEY_ID=s3
+          - SCALITY_SECRET_ACCESS_KEY=s3
+          - SSL="FALSE"            
+       networks:
+          - webappnetwork      
+            
 networks:
    webappnetwork:
       driver: bridge

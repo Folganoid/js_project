@@ -12,7 +12,8 @@ export const loginReducer = (state = defaultState, action) => {
             return {...state, login: action.payload};
         case LOGIN_CHANGE_PASSWORD:
             return {...state, password: action.payload};
+        default:
+            return state;
     }
 
-    return state;
 };

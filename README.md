@@ -4,3 +4,4 @@ symfony: 	localhost:3001
 react build: 	localhost:3002
 react src:  	localhost:3000
 mysql		localhost:3606 temp/temp/temp
+s3server	localhost:8000 s3/s3

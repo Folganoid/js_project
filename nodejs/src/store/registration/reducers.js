@@ -23,7 +23,8 @@ export const registrationReducer = (state = defaultState, action) => {
             return {...state, password: action.payload};
         case REGISTRATION_CHANGE_PASSWORD2:
             return {...state, password2: action.payload};
+        default:
+            return state;
     }
 
-    return state;
 };
