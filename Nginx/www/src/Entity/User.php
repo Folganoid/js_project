@@ -17,6 +17,9 @@ class User
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @ORM\OneToMany(targetEntity="App\Entity\Token", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\Picture", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\PictureRating", mappedBy="user_id")
+     * @ORM\OneToMany(targetEntity="App\Entity\PictureComment", mappedBy="user_id")
      */
     private $id;
 

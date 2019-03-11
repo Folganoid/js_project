@@ -1,0 +1,15 @@
+liip_imagine:
+  resolvers:
+    profile_photos:
+      aws_s3:
+        client_config:
+          credentials:
+            key:    "%amazon.s3.key%"
+            secret: "%amazon.s3.secret%"
+          region: "%amazon.s3.region%"
+          version: "%amazon.s3.version%"
+        bucket: "%amazon.s3.bucket%"
+        get_options:
+          Scheme: http
+        put_options:
+          CacheControl: "max-age=86400"

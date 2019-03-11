@@ -21,3 +21,8 @@ test:
   path:     /test
   methods:    [POST]
   controller: 'App\Controller\HomeController::testAction'
+
+picture:
+  path:     /picture
+  methods:    [GET]
+  controller: 'App\Controller\PictureController::getPictureAction'

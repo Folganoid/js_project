@@ -15,6 +15,7 @@ services:
             - ./Nginx/html:/usr/share/nginx/html/
         links:
             - php
+            - s3server
         networks:
             - webappnetwork
     mysql:
@@ -41,6 +42,7 @@ services:
 
         links:
             - mysql
+            - s3server
         networks:
             - webappnetwork
 
@@ -61,15 +63,16 @@ services:
     s3server:
        image: scality/s3server:latest
        container_name: s3server
-       restart: unless-stopped
+       restart: always
        ports:
           - "8000:8000"
        volumes:
           - ./S3/s3data:/usr/src/app/localData
           - ./S3/s3metadata:/usr/src/app/localMetadata
+          - "${PWD}/s3.json:/usr/src/app/config.json"
        environment:
-          - SCALITY_ACCESS_KEY_ID=s3
-          - SCALITY_SECRET_ACCESS_KEY=s3
+          - SCALITY_ACCESS_KEY_ID=111
+          - SCALITY_SECRET_ACCESS_KEY=111
           - SSL="FALSE"            
        networks:
           - webappnetwork      

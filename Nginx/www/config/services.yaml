@@ -6,6 +6,13 @@
 parameters:
     locale: 'en'
 
+    amazon.s3.key:     "111"
+    amazon.s3.secret:  "111"
+    amazon.s3.url:  "http://s3server:8000"
+    #amazon.s3.bucket:  "my-bucket"
+    amazon.s3.region:  "us-east-1"
+    amazon.s3.version: "2006-03-01"
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -26,3 +33,27 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    Aws\S3\S3Client: '@acme.amazon_s3'
+
+    acme.amazon_s3:
+        class: Aws\S3\S3Client
+        factory: [Aws\S3\S3Client, factory]
+        arguments:
+        -
+            credentials: { key: "%amazon.s3.key%", secret: "%amazon.s3.secret%" }
+            endpoint: "%amazon.s3.url%"
+            sslEnabled: false
+            use_path_style_endpoint: true
+            #use_accelerate_endpoint: true
+            #force_path_style: true
+            region: "%amazon.s3.region%"
+            version: "%amazon.s3.version%"
+
+    acme.imagine.cache.resolver.amazon_s3:
+        class: Liip\ImagineBundle\Imagine\Cache\Resolver\AwsS3Resolver
+        arguments:
+        - "@acme.amazon_s3"
+        #- "%amazon.s3.bucket%"
+        tags:
+        - { name: "liip_imagine.cache.resolver", resolver: "amazon_s3" }
