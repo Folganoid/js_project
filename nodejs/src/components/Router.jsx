@@ -2,8 +2,11 @@ import React from 'react';
 import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
+
 import LoginContainer from "./LoginContainer";
 import RegistrationContainer from "./RegistrationContainer";
+import PictureContainer from "./PictureContainer";
+
 import Logout from "./Logout";
 import Card from "react-bootstrap/es/Card";
 import connect from "react-redux/es/connect/connect";
@@ -56,8 +59,8 @@ class Router extends React.Component {
                     <Navbar.Toggle aria-controls="basic-navbar-nav"/>
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
-                            <LinkContainer to="/link1">
-                                <Nav.Link eventkey={1}>Link1</Nav.Link>
+                            <LinkContainer to="/pictures">
+                                <Nav.Link eventkey={1}>Picture</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to="/link2">
                                 <Nav.Link eventkey={2}>Link2</Nav.Link>
@@ -69,7 +72,7 @@ class Router extends React.Component {
                 <div>
                     <Switch>
                         <Route exact path="/" component={Home}/>
-                        <Route exact path="/link1" component={Link2}/>
+                        <Route exact path="/pictures" component={PictureContainer}/>
                         <Route exact path="/link2" component={Link1}/>
                         <Route exact path="/login" component={LoginContainer}/>
                         <Route exact path="/registration" component={RegistrationContainer}/>
@@ -90,7 +93,6 @@ class Router extends React.Component {
 
 const Home = () => <h1>Hello from Home!</h1>;
 const Link1 = () => <h1>Hello from Link1!</h1>;
-const Link2 = () => <h1>Hello from Link2!</h1>;
 
 const mapStateToProps = state => {
     return {

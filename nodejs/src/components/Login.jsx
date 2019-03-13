@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import {Redirect} from "react-router-dom";
+import SETUP from '../config';
 
 /**
  * Login
@@ -30,7 +31,7 @@ class Login extends React.Component {
             'Login': this.props.login,
             'Password': this.props.password,
         };
-        axios.post("http://127.0.0.1:3001/token/generate", "", {headers: headers})
+        axios.post( SETUP.symfonyHost + "/token/generate", "", {headers: headers})
 
             .then((response) => {
                 localStorage.clear();

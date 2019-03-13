@@ -52,12 +52,12 @@ class Picture
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): int
     {
         return $this->user_id;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 

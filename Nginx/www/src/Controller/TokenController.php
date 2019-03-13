@@ -67,7 +67,7 @@ class TokenController extends AbstractController
         if (!$access || strlen($access) == 0) return $responseService->buildErrorResponse(404, "Invalid refresh token data...");
 
         $manager = $this->getDoctrine()->getManager();
-        $user = $this->checkUserByAccessTokenAction($access, $manager);
+        $user = (new TokenService())->getUserByAccessToken($access, $manager);
 
         if ($user->getRole() == "404") return $responseService->buildErrorResponse(404, "Invalid access token...");
         if ($user->getRole() == "401") return $responseService->buildErrorResponse(401, "Access token time elapsed...");
