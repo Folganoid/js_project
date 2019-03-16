@@ -43,6 +43,16 @@ class Picture
     private $s3link;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $s3minlink;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $coord;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $created_at;
@@ -96,6 +106,30 @@ class Picture
     public function setS3link(string $s3link): self
     {
         $this->s3link = $s3link;
+
+        return $this;
+    }
+
+    public function getS3minlink(): ?string
+    {
+        return $this->s3minlink;
+    }
+
+    public function setS3minlink(string $s3minlink): self
+    {
+        $this->s3minlink = $s3minlink;
+
+        return $this;
+    }
+
+    public function getCoord(): ?string
+    {
+        return $this->coord;
+    }
+
+    public function setCoord(string $coord): self
+    {
+        $this->coord = $coord;
 
         return $this;
     }

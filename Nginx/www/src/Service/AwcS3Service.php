@@ -13,6 +13,16 @@ use Aws\S3\S3Client;
 class AwcS3Service
 {
 
+    /**
+     * save picture to s3
+     *
+     * @param string $bucket
+     * @param string $fileName
+     * @param $fileBody
+     * @param S3Client $s3
+     * @return string
+     * @throws \Exception
+     */
     public function savePicture(string $bucket, string $fileName, $fileBody, S3Client $s3): string {
 
         $isExistBucket = $s3->doesBucketExist($bucket);
@@ -38,7 +48,14 @@ class AwcS3Service
         return $urlRes;
     }
 
-    public function deletePicture(string $link, S3Client $s3): string {
+    /**
+     * delete picture from s3
+     *
+     * @param string $link
+     * @param S3Client $s3
+     * @return \Aws\Result
+     */
+    public function deletePicture(string $link, S3Client $s3) {
 
         $linkArr = explode("/", $link);
 
@@ -54,6 +71,13 @@ class AwcS3Service
 
     }
 
+    /**
+     * read picture from s3
+     *
+     * @param string $link
+     * @param S3Client $s3
+     * @return string
+     */
     public function readPicture(string $link, S3Client $s3): string {
 
         $linkArr = explode("/", $link);

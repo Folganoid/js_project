@@ -6,6 +6,8 @@ use App\Entity\Picture;
 use App\Service\AwcS3Service;
 use App\Service\ResponseService;
 use App\Service\TokenService;
+use App\Service\SysService;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Aws\S3\S3Client;
 
@@ -27,10 +29,16 @@ class PictureController extends MainController
         if ($method == "POST") {
             $file = $request->files->get('file');
             $contents = file_get_contents($file->getPathname());
-            $fileName = $this->getGUID();
+            $fileName = SysService::getGUID();
+            $fileNameMin = SysService::getGUID();
+
+            $type = getimagesize($file->getPathname());
+            if (!$type) return $responseService->buildErrorResponse(404, "File is not image...");
 
             try {
                 $link = $awcS3Service->savePicture($user->getLogin(), $fileName, $contents, $s3);
+                $contentsMin = resize_image($file->getPathname(), 150, 150);
+                $linkMin = $awcS3Service->savePicture($user->getLogin(), $fileNameMin, $contentsMin, $s3);
             } catch (\Exception $e) {
                 return $responseService->buildErrorResponse(500, $e->getMessage());
             }
@@ -43,26 +51,47 @@ class PictureController extends MainController
             $picture->setName("");
             $picture->setDescription("");
             $picture->setS3link($link);
+            $picture->setS3minlink($linkMin);
+            $picture->setCoord("111");
             $picture->setCreatedAt($createAt);
             $manager->persist($picture);
             $manager->flush();
 
-            return $responseService->buildOkResponse([$method, $access, $fileName, $link]);
+            return $responseService->buildOkResponse([$method, $access, $fileName, $link, $type]);
+        } else if ($method == "GET") {
+
+        } else if ($method == "DELETE") {
+
         }
+
 
         return $responseService->buildErrorResponse(500, "Server error...");
     }
 
-    function getGUID(){
-            mt_srand((double)microtime()*10000);//optional for php 4.2.0 and up.
-            $charid = strtolower(md5(uniqid(rand(), true)));
+    function resize_image($file, $w, $h, $crop=FALSE) {
+        list($width, $height) = getimagesize($file);
+        $r = $width / $height;
+        if ($crop) {
+            if ($width > $height) {
+                $width = ceil($width-($width*abs($r-$w/$h)));
+            } else {
+                $height = ceil($height-($height*abs($r-$w/$h)));
+            }
+            $newwidth = $w;
+            $newheight = $h;
+        } else {
+            if ($w/$h > $r) {
+                $newwidth = $h*$r;
+                $newheight = $h;
+            } else {
+                $newheight = $w/$r;
+                $newwidth = $w;
+            }
+        }
+        $src = imagecreatefromjpeg($file);
+        $dst = imagecreatetruecolor($newwidth, $newheight);
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
 
-            $uuid = substr($charid, 0, 8)
-                .substr($charid, 8, 4)
-                .substr($charid,12, 4)
-                .substr($charid,16, 4)
-                .substr($charid,20,12);
-            return $uuid;
+        return $dst;
     }
-
 }

@@ -37,6 +37,7 @@ services:
 
     php:
         build: ./PHP
+        restart: always
         volumes:
             - ./Nginx/www:/var/www
 
