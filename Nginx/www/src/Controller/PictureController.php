@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Entity\PictureRating;
 use App\Service\AwcS3Service;
 use App\Service\ResponseService;
 use App\Service\TokenService;
@@ -11,6 +12,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Aws\S3\S3Client;
 
+
 class PictureController extends MainController
 {
 
@@ -18,8 +20,11 @@ class PictureController extends MainController
     {
         $method = $request->getMethod();
         $access = $request->headers->get('Access');
+        $attributes = $request->request->all();
 
-        $manager = $this->getDoctrine()->getManager();
+
+        $doctrine = $this->getDoctrine();
+        $manager = $doctrine->getManager();
         $user = (new TokenService())->getUserByAccessToken($access, $manager);
         if (!$user->getLogin() || strlen($user->getLogin()) == 0) return $responseService->buildErrorResponse(404, "Access denied...");
 
@@ -37,7 +42,7 @@ class PictureController extends MainController
 
             try {
                 $link = $awcS3Service->savePicture($user->getLogin(), $fileName, $contents, $s3);
-                $contentsMin = resize_image($file->getPathname(), 150, 150);
+                $contentsMin = $this->resizeImage($file->getPathname(), 150, 150);
                 $linkMin = $awcS3Service->savePicture($user->getLogin(), $fileNameMin, $contentsMin, $s3);
             } catch (\Exception $e) {
                 return $responseService->buildErrorResponse(500, $e->getMessage());
@@ -48,17 +53,57 @@ class PictureController extends MainController
 
             $picture = new Picture();
             $picture->setUserId($user->getId());
-            $picture->setName("");
-            $picture->setDescription("");
+            $picture->setName($attributes['name']);
+            $picture->setDescription($attributes['desc']);
             $picture->setS3link($link);
             $picture->setS3minlink($linkMin);
-            $picture->setCoord("111");
+            $picture->setCoord($attributes['coord']);
             $picture->setCreatedAt($createAt);
             $manager->persist($picture);
             $manager->flush();
 
             return $responseService->buildOkResponse([$method, $access, $fileName, $link, $type]);
+
+        /**
+         * GET
+         */
         } else if ($method == "GET") {
+
+            $repository = $doctrine->getRepository(Picture::class);
+            //$pictures = $repository->findBy(['user_id' => $user->getId()]);
+            $pictures = $repository->findPictureWithRate($user->getId());
+
+            $pics = [];
+            foreach ($pictures as $onePicture) {
+
+                if (isset($pics[$onePicture['id']])) {
+
+                    if (isset($pics[$onePicture['id']]['rateCount'])) {
+                        $pics[$onePicture['id']]['rateCount']++;
+                        $pics[$onePicture['id']]['rate'] = ($pics[$onePicture['id']]['rate'] + $onePicture['rate']) / 2;
+                    }
+
+                } else {
+
+                    $pics[$onePicture['id']] = [
+                        "name" => $onePicture['name'],
+                        "description" => $onePicture['description'],
+                        "coord" => $onePicture['coord'],
+                        "s3Link" => $onePicture['s3link'],
+                        "body" => $awcS3Service->readPicture($onePicture['s3link'], $s3),
+                        "id" => $onePicture['id'],
+                    ];
+
+                    if (isset($onePicture["rate"])) {
+                        $pics[$onePicture['id']]["rate"] = $onePicture["rate"];
+                        $pics[$onePicture['id']]["rateCount"] = 1;
+                    }
+
+                }
+            }
+
+            return $responseService->buildOkResponse($pics);
+
 
         } else if ($method == "DELETE") {
 
@@ -68,30 +113,10 @@ class PictureController extends MainController
         return $responseService->buildErrorResponse(500, "Server error...");
     }
 
-    function resize_image($file, $w, $h, $crop=FALSE) {
-        list($width, $height) = getimagesize($file);
-        $r = $width / $height;
-        if ($crop) {
-            if ($width > $height) {
-                $width = ceil($width-($width*abs($r-$w/$h)));
-            } else {
-                $height = ceil($height-($height*abs($r-$w/$h)));
-            }
-            $newwidth = $w;
-            $newheight = $h;
-        } else {
-            if ($w/$h > $r) {
-                $newwidth = $h*$r;
-                $newheight = $h;
-            } else {
-                $newheight = $w/$r;
-                $newwidth = $w;
-            }
-        }
-        $src = imagecreatefromjpeg($file);
-        $dst = imagecreatetruecolor($newwidth, $newheight);
-        imagecopyresampled($dst, $src, 0, 0, 0, 0, $newwidth, $newheight, $width, $height);
-
-        return $dst;
+    function resizeImage(string $imagePath, int $width, int $height) {
+        //The blur factor where &gt; 1 is blurry, &lt; 1 is sharp.
+        $imagick = new \Imagick($imagePath);
+        $imagick->adaptiveResizeImage($width, $height);
+        return $imagick->getImageBlob();
     }
 }

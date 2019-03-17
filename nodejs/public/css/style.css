@@ -3,3 +3,26 @@
     width: 100%;
     bottom: 0px;
 }
+
+.pictureMin {
+    width: 400px;
+}
+
+.pictureMinBody {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    width: 150px;
+    height: 150px;
+    align-content: space-between;
+}
+
+.thumbnail {
+    padding: 5px;
+}
+
+.thumbnail_text {
+    padding-top: 5px;
+    font-size: 0.8em;
+    line-height: 10px;
+}

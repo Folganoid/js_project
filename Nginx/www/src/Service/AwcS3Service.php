@@ -92,7 +92,7 @@ class AwcS3Service
             ]
         );
 
-        return base64_decode($res['Body']);
+        return $res['Body'];
     }
 
 }

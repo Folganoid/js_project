@@ -22,19 +22,27 @@ class PictureRepository extends ServiceEntityRepository
     // /**
     //  * @return Picture[] Returns an array of Picture objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findPictureWithRate($userId)
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            ->select([
+                'p.id',
+                'p.name',
+                'p.description',
+                'p.s3link',
+                'p.s3minlink',
+                'p.coord',
+                'p.created_at',
+                'r.rate'])
+            ->leftJoin('App\Entity\PictureRating', 'r', 'with', 'p.id = r.picture_id')
+            ->where('p.user_id = ' . $userId)
+            //->addSelect('r.rate')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
+
 
     /*
     public function findOneBySomeField($value): ?Picture

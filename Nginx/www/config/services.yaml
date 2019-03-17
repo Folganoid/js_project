@@ -8,7 +8,7 @@ parameters:
 
     amazon.s3.key:     "111"
     amazon.s3.secret:  "111"
-    amazon.s3.url:  "http://s3server:8000"
+    amazon.s3.url:  '%env(resolve:S3_URL)%'
     #amazon.s3.bucket:  "my-bucket"
     amazon.s3.region:  "us-east-1"
     amazon.s3.version: "2006-03-01"
