@@ -1,11 +1,12 @@
 import React from 'react';
 import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch, Link} from "react-router-dom";
 
 import LoginContainer from "./LoginContainer";
 import RegistrationContainer from "./RegistrationContainer";
 import PictureContainer from "./PictureContainer";
+import PictureOneContainer from "./PictureOneContainer";
 
 import Logout from "./Logout";
 import Card from "react-bootstrap/es/Card";
@@ -73,6 +74,7 @@ class Router extends React.Component {
                     <Switch>
                         <Route exact path="/" component={Home}/>
                         <Route exact path="/pictures" component={PictureContainer}/>
+                        <Route exact path="/pictures/:user/:pictureId" component={PictureOneContainer}/>
                         <Route exact path="/link2" component={Link1}/>
                         <Route exact path="/login" component={LoginContainer}/>
                         <Route exact path="/registration" component={RegistrationContainer}/>

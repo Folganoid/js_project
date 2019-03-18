@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from "axios";
 import SETUP from "../config";
+import {Link} from "react-router-dom";
 
 /**
  * Picture
@@ -84,6 +85,10 @@ class Picture extends React.Component {
         const pictureMin = this.props.pictureMin;
         let that = this;
 
+        if (this.props.onePicture) {
+
+        }
+
         if (pictureMin === null) {
             picturesMinList = <p>Loading...</p>;
         } else {
@@ -95,10 +100,14 @@ class Picture extends React.Component {
 
                 //return <img style={{display: 'block', width: '150px', height: '150px'}} key={path} src={`data:image/jpeg;base64,${path}`} />
                 return <div className="thumbnail" key={key}>
-                    <img
+
+                        <Link to={ `/pictures/${pictureMin[key].s3Link}` }>
+                        <img
                          style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
                          src={`data:image/jpeg;base64,${pictureMin[key].body}`}
-                    />
+                        />
+                        </Link>
+
                     <div className="thumbnail_text">
                         {rate}
                         <dd><b>{pictureMin[key].name}</b></dd>
