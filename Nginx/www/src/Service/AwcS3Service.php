@@ -9,6 +9,7 @@
 namespace App\Service;
 
 use Aws\S3\S3Client;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class AwcS3Service
 {
@@ -85,14 +86,19 @@ class AwcS3Service
         $bucket = $linkArr[count($linkArr) - 2];
         $key = $linkArr[count($linkArr) - 1];
 
-        $res = $s3->getObject(
-            [
-                'Bucket' => $bucket,
-                'Key' => $key
-            ]
-        );
 
-        return $res['Body'];
+            if (!$s3->doesObjectExist($bucket, $key)) return "";
+
+            $res = $s3->getObject(
+                [
+                    'Bucket' => $bucket,
+                    'Key' => $key
+                ]
+            );
+
+            if (!isset($res['Body'])) return "";
+            return $res['Body'];
+
     }
 
 }

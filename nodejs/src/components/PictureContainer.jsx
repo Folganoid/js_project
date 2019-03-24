@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Picture from "./Picture";
-import {setPictureMin, setPictureName, setPictureDesc, setPictureCoord} from "../store/picture/actions";
+import {setPictureMin, setPictureMinMode, setPictureName, setPictureDesc, setPictureCoord} from "../store/picture/actions";
 
 class PictureContainer extends React.Component {
     render() {
@@ -9,10 +9,12 @@ class PictureContainer extends React.Component {
             userLogin={this.props.userLogin}
             userAccess={this.props.userAccess}
             pictureMin={this.props.pictureMin}
+            pictureMinMode={this.props.pictureMinMode}
             pictureName={this.props.pictureName}
             pictureDesc={this.props.pictureDesc}
             pictureCoord={this.props.pictureCoord}
             setPictureMin={this.props.setPictureMin}
+            setPictureMinMode={this.props.setPictureMinMode}
             setPictureName={this.props.setPictureName}
             setPictureDesc={this.props.setPictureDesc}
             setPictureCoord={this.props.setPictureCoord}
@@ -26,6 +28,7 @@ const mapStateToProps = state => {
         userLogin: state.user.userLogin,
         userAccess: state.user.userAccess,
         pictureMin: state.picture.pictureMin,
+        pictureMinMode: state.picture.pictureMinMode,
         pictureName: state.picture.pictureName,
         pictureDesc: state.picture.pictureDesc,
         pictureCoord: state.picture.pictureCoord,
@@ -34,6 +37,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
     setPictureMin,
+    setPictureMinMode,
     setPictureName,
     setPictureDesc,
     setPictureCoord

@@ -18,7 +18,7 @@ const store = createStore(rootReducer,
 
 // save store to localStorage
 store.subscribe(() => {
-    localStorage['redux-store'] = JSON.stringify(store.getState());
+    localStorage['redux-store'] = JSON.stringify({"user" : store.getState().user});
 });
 
 

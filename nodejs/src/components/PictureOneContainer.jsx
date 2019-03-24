@@ -1,17 +1,26 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import PictureOne from "./PictureOne";
+import {setPictureOne} from "../store/picture/actions";
 
 class PictureOneContainer extends React.Component {
-
     render() {
-
-        console.log(this.props.match);
-
-        return <div>
-            <h1>{this.props.match.params.user}</h1>
-            <h1>{this.props.match.params.pictureId}</h1>
-        </div>;
-
+        return <PictureOne
+            pictureOne={this.props.pictureOne}
+            setPictureOne={this.props.setPictureOne}
+            match = {this.props.match}
+        />;
     }
 }
 
-export default PictureOneContainer;
+const mapStateToProps = state => {
+    return {
+        pictureOne: state.picture.pictureOne,
+    };
+};
+
+const mapDispatchToProps = {
+    setPictureOne
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(PictureOneContainer);

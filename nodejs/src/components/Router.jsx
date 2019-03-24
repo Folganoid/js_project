@@ -1,7 +1,7 @@
 import React from 'react';
 import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
-import {BrowserRouter, Route, Switch, Link} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import LoginContainer from "./LoginContainer";
 import RegistrationContainer from "./RegistrationContainer";

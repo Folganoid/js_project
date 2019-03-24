@@ -26,3 +26,8 @@ picture:
   path:     /picture
   methods:    [POST, PUT, GET, DELETE]
   controller: 'App\Controller\PictureController::PictureAction'
+
+pictureOne:
+  path:     /picture/{bucket}/{s3link}
+  methods:    [POST, PUT, GET, DELETE]
+  controller: 'App\Controller\PictureController::PictureOneAction'

@@ -2,11 +2,29 @@ import React from 'react';
 import axios from "axios";
 import SETUP from "../config";
 import {Link} from "react-router-dom";
+import {Row, Col, Button, ButtonGroup} from "react-bootstrap";
 
 /**
  * Picture
  */
 class Picture extends React.Component {
+
+    getPictures = async () => {
+        await axios.get(SETUP.symfonyHost + "/picture", {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Access': this.props.userAccess,
+            }
+        }).then((response) => {
+            if (response.data !== undefined) this.changePictureMin(response.data);
+            else this.changePictureMin([]);
+            //console.log(response.data);
+        })
+            .catch(error => {
+                this.changePictureMin([]);
+                console.log(error);
+            });
+    };
 
     constructor(props) {
         super(props);
@@ -15,22 +33,26 @@ class Picture extends React.Component {
         this.buttonSend = this.buttonSend.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.rateToStars = this.rateToStars.bind(this);
+        this.setMode = this.setMode.bind(this);
         this.getPictures();
     }
 
     rateToStars(rate) {
 
         let res = "";
-        for (let i = 1 ; i <= 5 ; i++) {
+        for (let i = 1; i <= 5; i++) {
             if (+rate >= i) res += "★";
             else res += "☆"
         }
         return res;
     }
 
-
     changePictureMin(pictureMin) {
         this.props.setPictureMin(pictureMin);
+    }
+
+    setMode(event) {
+        this.props.setPictureMinMode(event.target.value);
     }
 
     handleInputChange(event) {
@@ -62,100 +84,120 @@ class Picture extends React.Component {
         })
     }
 
-    getPictures = async () => {
-        await axios.get(SETUP.symfonyHost + "/picture", {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-                'Access': this.props.userAccess,
-            }
-        }).then((response) => {
-            if (response.data !== undefined) this.changePictureMin(response.data);
-            else this.changePictureMin([]);
-            //console.log(response.data);
-        })
-            .catch(error => {
-                this.changePictureMin([]);
-                console.log(error);
-            });
-    };
-
     render() {
 
         let picturesMinList;
         const pictureMin = this.props.pictureMin;
         let that = this;
 
-        if (this.props.onePicture) {
+        const mode = this.props.pictureMinMode;
 
-        }
-
-        if (pictureMin === null) {
+        if (pictureMin.length === 0) {
+            console.log("---");
             picturesMinList = <p>Loading...</p>;
         } else {
+            console.log("+++");
             console.log(pictureMin);
 
             picturesMinList = Object.keys(pictureMin).map(function (key) {
 
-                const rate = (pictureMin[key].rate) ? <dd>{that.rateToStars(pictureMin[key].rate) + " " + (+pictureMin[key].rate).toFixed(2) + " / " + pictureMin[key].rateCount}</dd> : <dd />;
+                const rate = (pictureMin[key].rate) ?
+                    <dd>{that.rateToStars(pictureMin[key].rate) + " " + (+pictureMin[key].rate).toFixed(2) + " / " + pictureMin[key].rateCount}</dd> :
+                    <dd/>;
 
-                //return <img style={{display: 'block', width: '150px', height: '150px'}} key={path} src={`data:image/jpeg;base64,${path}`} />
-                return <div className="thumbnail" key={key}>
+                if (mode === "min") {
+                    return <Col xs={4} md={3} lg={2} className="thumbnail" key={key}>
 
-                        <Link to={ `/pictures/${pictureMin[key].s3Link}` }>
-                        <img
-                         style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
-                         src={`data:image/jpeg;base64,${pictureMin[key].body}`}
-                        />
+                        <Link to={`/pictures/${pictureMin[key].s3Link}`}>
+                            <img
+                                style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
+                                src={`data:image/jpeg;base64,${pictureMin[key].body}`}
+                                alt={pictureMin[key].description}
+                            />
                         </Link>
 
-                    <div className="thumbnail_text">
-                        {rate}
-                        <dd><b>{pictureMin[key].name}</b></dd>
-                        <dd>{pictureMin[key].description}</dd>
-                        <dd>{pictureMin[key].rateCount}</dd>
+                        <div className="thumbnail_text">
+                            {rate}
+                            <dd><b>{pictureMin[key].name}</b></dd>
+                            <dd>{pictureMin[key].description}</dd>
+                            <dd>{pictureMin[key].rateCount}</dd>
 
-                    </div>
-                </div>
+                        </div>
+                    </Col>
+                } else if (mode === "max") {
+                    return <Col xs={12} md={12} lg={12} key={key} className="thumbnail">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <Link to={`/pictures/${pictureMin[key].s3Link}`}>
+                                        <img
+                                            style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
+                                            src={`data:image/jpeg;base64,${pictureMin[key].body}`}
+                                            alt={pictureMin[key].description}
+                                        />
+                                    </Link>
+                                </td>
+                                <td>
+                                    <div className="thumbnail_text">
+                                        <dd><b>{pictureMin[key].name}</b></dd>
+                                        <dd>{pictureMin[key].description}</dd>
+                                        {rate}
+
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </Col>
+
+
+                }
             })
         }
 
         return <div>
-            <div>
+            <div className={"container"}>
                 <input
                     value={this.props.pictureName}
                     name="PictureName"
                     onChange={this.handleInputChange}
                     type="text"
                     placeholder="No name"
-                /><br />
+                />&nbsp;
                 <input
                     value={this.props.pictureDesc}
                     name="PictureDesc"
                     onChange={this.handleInputChange}
                     type="text"
                     placeholder="No description"
-                /><br />
+                />&nbsp;
                 <input
                     value={this.props.pictureCoord}
                     name="PictureCoord"
                     onChange={this.handleInputChange}
                     type="text"
                     placeholder="No coordinates"
-                /><br />
+                />&nbsp;
                 <input
                     type="file"
                     name="file"
                     id="sendPictureInput"
-                /><br />
+                />&nbsp;
+                <button onClick={this.buttonSend}>Send</button>
             </div>
-            <button onClick={this.buttonSend}>Send</button>
+            <br/>
+            <ButtonGroup name="PictureMinMode" aria-label="Basic example">
+                <Button value="min" onClick={this.setMode}>Min</Button>
+                <Button value="max" onClick={this.setMode}>Max</Button>
+            </ButtonGroup>;
+
+            <br/>
 
             <div className="container">
-                <div className="row pictureMin">
-                    <div className="col-md-12 pictureMinBody">
-                        {picturesMinList}
-                    </div>
-                </div>
+                <Row className="show-grid">
+                    {picturesMinList}
+                </Row>
             </div>
         </div>
 

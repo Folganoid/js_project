@@ -33,7 +33,11 @@ class PictureController extends MainController
          */
         if ($method == "POST") {
             $file = $request->files->get('file');
-            $contents = file_get_contents($file->getPathname());
+
+            $handle = fopen($file, "r");
+            $contents = fread($handle, filesize($file));
+            fclose($handle);
+
             $fileName = SysService::getGUID();
             $fileNameMin = SysService::getGUID();
 
@@ -113,6 +117,31 @@ class PictureController extends MainController
         return $responseService->buildErrorResponse(500, "Server error...");
     }
 
+    /**
+     * get one picture by link
+     *
+     * @param $bucket
+     * @param $s3link
+     * @param ResponseService $responseService
+     * @param S3Client $s3
+     * @param AwcS3Service $awcS3Service
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function PictureOneAction($bucket, $s3link, ResponseService $responseService, S3Client $s3, AwcS3Service $awcS3Service)
+    {
+        $body = $awcS3Service->readPicture($bucket ."/". $s3link, $s3);
+        return $responseService->buildOkResponse(["body" => $body]);
+    }
+
+    /**
+     * image resize
+     *
+     * @param string $imagePath
+     * @param int $width
+     * @param int $height
+     * @return string
+     * @throws \ImagickException
+     */
     function resizeImage(string $imagePath, int $width, int $height) {
         //The blur factor where &gt; 1 is blurry, &lt; 1 is sharp.
         $imagick = new \Imagick($imagePath);
