@@ -1,7 +1,7 @@
 import React from 'react';
-import {Nav, Navbar} from "react-bootstrap";
+import {Col, Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
 
 import LoginContainer from "./LoginContainer";
 import RegistrationContainer from "./RegistrationContainer";
@@ -11,17 +11,27 @@ import PictureOneContainer from "./PictureOneContainer";
 import Logout from "./Logout";
 import Card from "react-bootstrap/es/Card";
 import connect from "react-redux/es/connect/connect";
+import {setAlertShow} from "../store/actions";
 
 /**
  * Logout
  */
 class Router extends React.Component {
 
+
+
     render() {
 
-        const userLogin =this.props.userLogin;
+        const userLogin = this.props.userLogin;
+        const alertShow = this.props.alertShow;
+
 //        const userAccess = this.props.userAccess;
 //        const userRefresh = this.props.userRefresh;
+
+        let alertBody;
+        if (alertShow.length > 0 ) alertBody = Object.keys(alertShow).map(function (key) {
+                return <dd>{alertShow[key].type + " " + alertShow[key].message}</dd>;
+        });
 
         let authBlock;
         if (userLogin && userLogin.length > 0 ) authBlock = <Nav className="mr-right">
@@ -82,6 +92,7 @@ class Router extends React.Component {
                         <Route render={() => <h1>Page not found</h1>}/>
                     </Switch>
                 </div>
+                {alertBody}
                 <Card.Footer className="footer">
                     <small className="text-muted">FOOTER</small>
                 </Card.Footer>
@@ -100,8 +111,13 @@ const mapStateToProps = state => {
     return {
         userLogin: state.user.userLogin,
         userAccess: state.user.userAccess,
-        userRefresh: state.user.userRefresh
+        userRefresh: state.user.userRefresh,
+        alertShow: state.main.alertShow
     };
 };
 
-export default connect(mapStateToProps)(Router);
+const mapDispatchToProps = {
+    setAlertShow
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Router);

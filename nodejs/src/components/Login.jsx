@@ -46,6 +46,7 @@ class Login extends React.Component {
             })
             .catch((error) => {
                 localStorage.clear();
+                this.props.setAlertShow("error", error);
                 console.log(error);
             })
     }
