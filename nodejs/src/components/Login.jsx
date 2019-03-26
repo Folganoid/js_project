@@ -52,9 +52,6 @@ class Login extends React.Component {
 
     render() {
 
-        const {login, password} = this.props;
-        const userLogin = this.props.userLogin;
-
         if (this.state.redirect) return <div><Redirect to="/" /></div>;
 
         return <div>
@@ -77,11 +74,6 @@ class Login extends React.Component {
                 />
             </div>
             <button onClick={this.buttonSubmit}>Submit</button>
-            <div>
-                {login}
-                {password}
-                {userLogin}
-            </div>
         </div>
     }
 

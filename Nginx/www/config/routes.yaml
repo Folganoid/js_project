@@ -12,6 +12,11 @@ token_refresh:
   methods:    [PUT]
   controller: 'App\Controller\TokenController::refreshTokenAction'
 
+registration:
+  path:     /registration
+  methods:    [POST]
+  controller: 'App\Controller\UserController::registrationAction'
+
 home:
   path:     /
   methods:    [GET]

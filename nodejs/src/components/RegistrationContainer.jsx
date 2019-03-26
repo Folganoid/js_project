@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {setLogin, setEmail, setPassword, setPassword2} from "../store/registration/actions";
 import Registration from "./Registration";
+import {setUserAccess, setUserLogin, setUserRefresh} from "../store/user/actions";
 
 class RegistrationContainer extends React.Component {
     render() {
@@ -14,6 +15,10 @@ class RegistrationContainer extends React.Component {
             setEmail={this.props.setEmail}
             setPassword={this.props.setPassword}
             setPassword2={this.props.setPassword2}
+
+            setUserLogin={this.props.setUserLogin}
+            setUserAccess={this.props.setUserAccess}
+            setUserRefresh={this.props.setUserRefresh}
         />;
     }
 }
@@ -23,7 +28,11 @@ const mapStateToProps = state => {
         login: state.registration.login,
         email: state.registration.email,
         password: state.registration.password,
-        password2: state.registration.password2
+        password2: state.registration.password2,
+
+        userLogin: state.user.userLogin,
+        userAccess: state.user.userAccess,
+        userRefresh: state.user.userRefresh
     };
 };
 
@@ -31,7 +40,11 @@ const mapDispatchToProps = {
     setLogin,
     setEmail,
     setPassword,
-    setPassword2
+    setPassword2,
+
+    setUserLogin,
+    setUserAccess,
+    setUserRefresh
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationContainer);

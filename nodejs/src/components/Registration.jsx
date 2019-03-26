@@ -1,4 +1,7 @@
 import React from 'react';
+import axios from "axios";
+import SETUP from "../config";
+import {Redirect} from "react-router-dom";
 
 /**
  * Register
@@ -8,8 +11,10 @@ class Registration extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handleInputChange = this.handleInputChange.bind(this);
+        this.state = { redirect: false };
 
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.buttonSubmit = this.buttonSubmit.bind(this);
     }
 
     handleInputChange(event) {
@@ -20,9 +25,35 @@ class Registration extends React.Component {
         this.props[name](value);
     }
 
+    buttonSubmit() {
+
+        let headers = {
+            'Login': this.props.login,
+            'Email': this.props.email,
+            'Password': this.props.password,
+        };
+        axios.post( SETUP.symfonyHost + "/registration", "", {headers: headers})
+
+            .then((response) => {
+                localStorage.clear();
+                if (response['data']["accessToken"] && response['data']["refreshToken"]) {
+                    this.props.setUserLogin(headers.Login);
+                    this.props.setUserAccess(response['data']["accessToken"]);
+                    this.props.setUserRefresh(response['data']["refreshToken"]);
+                    this.setState({redirect: true});
+                }
+
+                console.log(response);
+            })
+            .catch((error) => {
+                localStorage.clear();
+                console.log(error);
+            })
+    }
+
     render() {
 
-        const {login, password, password2, email} = this.props;
+        if (this.state.redirect) return <div><Redirect to="/" /></div>;
 
         return <div>
             <div>
@@ -65,13 +96,7 @@ class Registration extends React.Component {
 
                 />
             </div>
-
-            <div>
-                {login}
-                {email}
-                {password}
-                {password2}
-            </div>
+            <button onClick={this.buttonSubmit}>Submit</button>
         </div>
     }
 
