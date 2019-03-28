@@ -11,27 +11,26 @@ import PictureOneContainer from "./PictureOneContainer";
 import Logout from "./Logout";
 import Card from "react-bootstrap/es/Card";
 import connect from "react-redux/es/connect/connect";
-import {setAlertShow} from "../store/actions";
+import {eraseAlertShow} from "../store/main/actions";
 
 /**
  * Logout
  */
 class Router extends React.Component {
 
-
-
     render() {
 
         const userLogin = this.props.userLogin;
         const alertShow = this.props.alertShow;
 
-//        const userAccess = this.props.userAccess;
-//        const userRefresh = this.props.userRefresh;
-
         let alertBody;
-        if (alertShow.length > 0 ) alertBody = Object.keys(alertShow).map(function (key) {
-                return <dd>{alertShow[key].type + " " + alertShow[key].message}</dd>;
-        });
+        let that = this;
+
+            alertBody = Object.keys(alertShow).map(function (key) {
+                setTimeout(() => {that.props.eraseAlertShow();}, 5000);
+                return <dd key={key}>{alertShow[key].type + " " + alertShow[key].message}</dd>;
+            });
+
 
         let authBlock;
         if (userLogin && userLogin.length > 0 ) authBlock = <Nav className="mr-right">
@@ -105,7 +104,9 @@ class Router extends React.Component {
 }
 
 const Home = () => <h1>Hello from Home!</h1>;
-const Link1 = () => <h1>Hello from Link1!</h1>;
+const Link1 = () => {
+    return <h1>Hello from Link1!</h1>
+};
 
 const mapStateToProps = state => {
     return {
@@ -117,7 +118,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    setAlertShow
+    eraseAlertShow
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Router);

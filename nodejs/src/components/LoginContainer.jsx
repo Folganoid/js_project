@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import Login from "./Login";
 import {setLogin, setPassword} from "../store/login/actions";
 import {setUserLogin, setUserAccess, setUserRefresh} from "../store/user/actions";
-import {setAlertShow} from "../store/actions";
+import {setAlertShow, eraseAlertShow} from "../store/main/actions";
 
 class LoginContainer extends React.Component {
     render() {
@@ -19,6 +19,7 @@ class LoginContainer extends React.Component {
             setUserRefresh={this.props.setUserRefresh}
 
             setAlertShow={this.props.setAlertShow}
+            eraseAlertShow={this.props.eraseAlertShow}
         />;
 
     }
@@ -44,6 +45,7 @@ const mapDispatchToProps = {
     setUserRefresh,
 
     setAlertShow,
+    eraseAlertShow,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoginContainer);
