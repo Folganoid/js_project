@@ -4,6 +4,7 @@ export const PICTURE_CHANGE_NAME = 'PICTURE_CHANGE_NAME';
 export const PICTURE_CHANGE_DESC = 'PICTURE_CHANGE_DESC';
 export const PICTURE_CHANGE_COORD = 'PICTURE_CHANGE_COORD';
 export const PICTURE_CHANGE_PICTURE_ONE = 'PICTURE_CHANGE_PICTURE_ONE';
+export const PICTURE_REQUEST_DONE = 'PICTURE_REQUEST_DONE';
 
 export const setPictureMin = (newPicture) => {
     return {
@@ -44,5 +45,12 @@ export const setPictureCoord = (coordPicture) => {
     return {
         type: PICTURE_CHANGE_COORD,
         payload: coordPicture
+    }
+};
+
+export const setPictureRequestDone = (ok) => {
+    return {
+        type: PICTURE_REQUEST_DONE,
+        payload: ok
     }
 };

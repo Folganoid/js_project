@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import PictureOne from "./PictureOne";
 import {setPictureOne} from "../store/picture/actions";
+import {setAlertShow} from "../store/main/actions";
 
 class PictureOneContainer extends React.Component {
     render() {
@@ -9,6 +10,7 @@ class PictureOneContainer extends React.Component {
             pictureOne={this.props.pictureOne}
             setPictureOne={this.props.setPictureOne}
             match = {this.props.match}
+            setAlertShow={this.props.setAlertShow}
         />;
     }
 }
@@ -20,7 +22,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-    setPictureOne
+    setPictureOne,
+    setAlertShow
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PictureOneContainer);

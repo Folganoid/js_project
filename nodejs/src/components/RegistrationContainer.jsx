@@ -3,6 +3,8 @@ import {connect} from 'react-redux';
 import {setLogin, setEmail, setPassword, setPassword2} from "../store/registration/actions";
 import Registration from "./Registration";
 import {setUserAccess, setUserLogin, setUserRefresh} from "../store/user/actions";
+import {setAlertShow} from "../store/main/actions";
+
 
 class RegistrationContainer extends React.Component {
     render() {
@@ -19,6 +21,8 @@ class RegistrationContainer extends React.Component {
             setUserLogin={this.props.setUserLogin}
             setUserAccess={this.props.setUserAccess}
             setUserRefresh={this.props.setUserRefresh}
+
+            setAlertShow={this.props.setAlertShow}
         />;
     }
 }
@@ -44,7 +48,9 @@ const mapDispatchToProps = {
 
     setUserLogin,
     setUserAccess,
-    setUserRefresh
+    setUserRefresh,
+
+    setAlertShow,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegistrationContainer);

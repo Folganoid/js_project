@@ -2,6 +2,7 @@ import React from 'react';
 import {setUserLogin, setUserAccess, setUserRefresh} from "../store/user/actions";
 import {Redirect} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
+import {setAlertShow} from "../store/main/actions";
 
 /**
  * Logout
@@ -15,6 +16,8 @@ class Logout extends React.Component {
         this.props.setUserLogin("");
         this.props.setUserAccess("");
         this.props.setUserRefresh("");
+
+        this.props.setAlertShow("warning", "Logout...")
     }
 
     render() {
@@ -37,7 +40,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = {
     setUserLogin,
     setUserAccess,
-    setUserRefresh
+    setUserRefresh,
+    setAlertShow
+
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Logout);

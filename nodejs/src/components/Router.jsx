@@ -1,7 +1,7 @@
 import React from 'react';
-import {Col, Nav, Navbar} from "react-bootstrap";
+import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Switch} from "react-router-dom";
 
 import LoginContainer from "./LoginContainer";
 import RegistrationContainer from "./RegistrationContainer";
@@ -12,6 +12,7 @@ import Logout from "./Logout";
 import Card from "react-bootstrap/es/Card";
 import connect from "react-redux/es/connect/connect";
 import {eraseAlertShow} from "../store/main/actions";
+import AlertShow from "./AlertShow";
 
 /**
  * Logout
@@ -21,19 +22,14 @@ class Router extends React.Component {
     render() {
 
         const userLogin = this.props.userLogin;
-        const alertShow = this.props.alertShow;
 
-        let alertBody;
-        let that = this;
-
-            alertBody = Object.keys(alertShow).map(function (key) {
-                setTimeout(() => {that.props.eraseAlertShow();}, 5000);
-                return <dd key={key}>{alertShow[key].type + " " + alertShow[key].message}</dd>;
-            });
-
+        const alertShow = <AlertShow
+            alertShow={this.props.alertShow}
+            eraseAlertShow={this.props.eraseAlertShow}
+        />;
 
         let authBlock;
-        if (userLogin && userLogin.length > 0 ) authBlock = <Nav className="mr-right">
+        if (userLogin && userLogin.length > 0) authBlock = <Nav className="mr-right">
             <Navbar.Text>{userLogin}</Navbar.Text>
             <LinkContainer to="/logout">
                 <Nav.Link eventkey={4}>Logout</Nav.Link>
@@ -60,7 +56,7 @@ class Router extends React.Component {
                 src="https://unpkg.com/react-bootstrap@next/dist/react-bootstrap.min.js"
                 crossOrigin="true"
             />
-
+            {alertShow}
             <div>
                 <Navbar bg="light" expand="lg">
                     <LinkContainer to="/">
@@ -91,7 +87,6 @@ class Router extends React.Component {
                         <Route render={() => <h1>Page not found</h1>}/>
                     </Switch>
                 </div>
-                {alertBody}
                 <Card.Footer className="footer">
                     <small className="text-muted">FOOTER</small>
                 </Card.Footer>

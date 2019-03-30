@@ -41,13 +41,15 @@ class Registration extends React.Component {
                     this.props.setUserAccess(response['data']["accessToken"]);
                     this.props.setUserRefresh(response['data']["refreshToken"]);
                     this.setState({redirect: true});
+                    this.props.setAlertShow("success", "User " + this.props.login + "registered successfully...");
                 }
 
-                console.log(response);
+//console.log(response);
             })
             .catch((error) => {
                 localStorage.clear();
-                console.log(error);
+                this.props.setAlertShow("danger", error.toString());
+//console.log(error);
             })
     }
 

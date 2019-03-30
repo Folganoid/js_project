@@ -41,19 +41,20 @@ class Login extends React.Component {
                     this.props.setUserAccess(response['data']["accessToken"]);
                     this.props.setUserRefresh(response['data']["refreshToken"]);
                     this.setState({redirect: true});
+                    this.props.setAlertShow("success", "Hello " + this.props.login + ", you login successfully...");
                 }
 
-                console.log(response);
+//console.log(response);
             })
             .catch((error) => {
                 localStorage.clear();
-                this.props.setAlertShow("error", error);
-                console.log(error);
+                this.props.setAlertShow("danger", error.toString());
+//console.log(error);
             })
     }
 
     buttonSubmit2() {
-        this.props.setAlertShow("!!!!!", "!!!!!");
+        this.props.setAlertShow("warning", "!!!!!");
     }
 
     render() {

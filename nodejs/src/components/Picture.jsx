@@ -18,11 +18,14 @@ class Picture extends React.Component {
         }).then((response) => {
             if (response.data !== undefined) this.changePictureMin(response.data);
             else this.changePictureMin([]);
-            //console.log(response.data);
+            this.props.setPictureRequestDone(true);
+//console.log(response.data);
         })
             .catch(error => {
                 this.changePictureMin([]);
-                console.log(error);
+                this.props.setAlertShow("warning", "Pictures not found");
+                this.props.setPictureRequestDone(true);
+//console.log(error);
             });
     };
 
@@ -63,7 +66,7 @@ class Picture extends React.Component {
         this.props[name](value);
     }
 
-    buttonSend() {
+    async buttonSend() {
 
         let formData = new FormData();
         let imagefile = document.querySelector('#sendPictureInput');
@@ -71,16 +74,18 @@ class Picture extends React.Component {
         formData.append("name", this.props.pictureName);
         formData.append("desc", this.props.pictureDesc);
         formData.append("coord", this.props.pictureCoord);
-        axios.post(SETUP.symfonyHost + "/picture", formData, {
+        await axios.post(SETUP.symfonyHost + "/picture", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Access': this.props.userAccess,
             }
         }).then((response) => {
+            this.props.setAlertShow("success", "Picture was uploaded successfully...");
             this.getPictures();
-            //console.log(response);
+//console.log(response);
         }).catch((error) => {
-            console.log(error);
+            this.props.setAlertShow("danger", error.toString());
+//console.log(error);
         })
     }
 
@@ -92,12 +97,11 @@ class Picture extends React.Component {
 
         const mode = this.props.pictureMinMode;
 
-        if (pictureMin.length === 0) {
-            console.log("---");
+        if (!this.props.pictureRequestDone) {
             picturesMinList = <p>Loading...</p>;
         } else {
-            console.log("+++");
-            console.log(pictureMin);
+
+//console.log(pictureMin);
 
             picturesMinList = Object.keys(pictureMin).map(function (key) {
 

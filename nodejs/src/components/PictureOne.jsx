@@ -29,7 +29,8 @@ class PictureOne extends React.Component {
         })
             .catch(error => {
                 this.changePicture("");
-                console.log(error);
+                this.props.setAlertShow("danger", error.toString());
+//console.log(error);
             });
     };
 
@@ -48,7 +49,7 @@ class PictureOne extends React.Component {
             alt={this.props.match.params.user + "/" + this.props.match.params.pictureId}
         />;
 
-        console.log(this.props.match);
+//console.log(this.props.match);
 
         return <div>
             {picture}
