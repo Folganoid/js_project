@@ -21,7 +21,7 @@ class Picture extends React.Component {
             this.props.setPictureRequestDone(true);
 //console.log(response.data);
         })
-            .catch(error => {
+        .catch(error => {
                 this.changePictureMin([]);
                 this.props.setAlertShow("warning", "Pictures not found");
                 this.props.setPictureRequestDone(true);
@@ -34,9 +34,9 @@ class Picture extends React.Component {
 
         this.changePictureMin = this.changePictureMin.bind(this);
         this.buttonSend = this.buttonSend.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
         this.rateToStars = this.rateToStars.bind(this);
         this.setMode = this.setMode.bind(this);
+        this.choosePictures = this.choosePictures.bind(this);
         this.getPictures();
     }
 
@@ -58,29 +58,63 @@ class Picture extends React.Component {
         this.props.setPictureMinMode(event.target.value);
     }
 
-    handleInputChange(event) {
-        const target = event.target;
-        const value = target.value;
-        const name = "set" + target.name;
+    choosePictures() {
+        let imagefile = document.querySelector('#sendPictureInput');
 
-        this.props[name](value);
+        let names = [];
+
+        for (let i = 0 ; i < imagefile.files.length; i++) {
+            names.push(imagefile.files[i].name);
+        }
+
+        this.props.setPictureName(names);
+
     }
 
     async buttonSend() {
 
+        let namesArr = [];
+        let descsArr = [];
+        let coordsArr = [];
+
+        let names = document.querySelectorAll('.pictureName');
+        let descs = document.querySelectorAll('.pictureDesc');
+        let coords = document.querySelectorAll('.pictureCoord');
+
+        for (let i = 0; i < names.length; i++) {
+            namesArr.push( names[i].value );
+        }
+
+        for (let i = 0; i < descs.length; i++) {
+            descsArr.push( descs[i].value );
+        }
+
+        for (let i = 0; i < coords.length; i++) {
+            coordsArr.push( coords[i].value );
+        }
+
         let formData = new FormData();
         let imagefile = document.querySelector('#sendPictureInput');
-        formData.append("file", imagefile.files[0]);
-        formData.append("name", this.props.pictureName);
-        formData.append("desc", this.props.pictureDesc);
-        formData.append("coord", this.props.pictureCoord);
+
+        for( var i = 0; i < imagefile.files.length; i++ ){
+            formData.append('files[' + i + ']', imagefile.files[i]);
+        }
+
+        formData.append("names", JSON.stringify(namesArr));
+        formData.append("descs", JSON.stringify(descsArr));
+        formData.append("coords", JSON.stringify(coordsArr));
+
         await axios.post(SETUP.symfonyHost + "/picture", formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Access': this.props.userAccess,
             }
         }).then((response) => {
+
             this.props.setAlertShow("success", "Picture was uploaded successfully...");
+            this.props.setPictureName([]);
+            document.querySelector('#sendPictureInput').value = "";
+
             this.getPictures();
 //console.log(response);
         }).catch((error) => {
@@ -96,6 +130,7 @@ class Picture extends React.Component {
         let that = this;
 
         const mode = this.props.pictureMinMode;
+        const names = this.props.pictureName;
 
         if (!this.props.pictureRequestDone) {
             picturesMinList = <p>Loading...</p>;
@@ -160,33 +195,45 @@ class Picture extends React.Component {
             })
         }
 
-        return <div>
-            <div className={"container"}>
-                <input
-                    value={this.props.pictureName}
-                    name="PictureName"
-                    onChange={this.handleInputChange}
-                    type="text"
-                    placeholder="No name"
-                />&nbsp;
-                <input
-                    value={this.props.pictureDesc}
-                    name="PictureDesc"
-                    onChange={this.handleInputChange}
-                    type="text"
-                    placeholder="No description"
-                />&nbsp;
-                <input
-                    value={this.props.pictureCoord}
-                    name="PictureCoord"
-                    onChange={this.handleInputChange}
-                    type="text"
-                    placeholder="No coordinates"
-                />&nbsp;
+        let namesList;
+        if (names.length > 0) {
+            console.log(names);
+            namesList = Object.keys(names).map(function (key) {
+                return <div className={"row"} key={key}>
+                    <input
+                        className="pictureName"
+                        value={names[key]}
+                        name="PictureName"
+                        type="text"
+                        placeholder="No name"
+                    />&nbsp;
+                    <input
+                        className="pictureDesc"
+                        name="PictureDesc"
+                        type="text"
+                        placeholder="No description"
+                    />&nbsp;
+                    <input
+                        className="pictureCoord"
+                        name="PictureCoord"
+                        type="text"
+                        placeholder="No coordinates"
+                    />
+                </div>
+            });
+        } else {
+
+        }
+
+        return <div className={"container"}>
+            <div>
+                {namesList}
                 <input
                     type="file"
                     name="file"
+                    multiple="multiple"
                     id="sendPictureInput"
+                    onChange={this.choosePictures}
                 />&nbsp;
                 <button onClick={this.buttonSend}>Send</button>
             </div>

@@ -20,8 +20,6 @@ class PictureController extends MainController
     {
         $method = $request->getMethod();
         $access = $request->headers->get('Access');
-        $attributes = $request->request->all();
-
 
         $doctrine = $this->getDoctrine();
         $manager = $doctrine->getManager();
@@ -32,41 +30,53 @@ class PictureController extends MainController
          * POST
          */
         if ($method == "POST") {
-            $file = $request->files->get('file');
-
-            $handle = fopen($file, "r");
-            $contents = fread($handle, filesize($file));
-            fclose($handle);
-
-            $fileName = SysService::getGUID();
-            $fileNameMin = SysService::getGUID();
-
-            $type = getimagesize($file->getPathname());
-            if (!$type) return $responseService->buildErrorResponse(404, "File is not image...");
 
             try {
-                $link = $awcS3Service->savePicture($user->getLogin(), $fileName, $contents, $s3);
-                $contentsMin = $this->resizeImage($file->getPathname(), 150, 150);
-                $linkMin = $awcS3Service->savePicture($user->getLogin(), $fileNameMin, $contentsMin, $s3);
+
+                $files = $request->files->get('files');
+                $names = json_decode($request->get('names'), true);
+                $descs = json_decode($request->get('descs'), true);
+                $coords = json_decode($request->get('coords'), true);
+
+                for ($i = 0; $i < count($files); $i++) {
+
+                    $handle = fopen($files[$i], "r");
+                    $contents = fread($handle, filesize($files[$i]));
+                    fclose($handle);
+
+                    $fileName = SysService::getGUID();
+                    $fileNameMin = SysService::getGUID();
+
+                    $type = getimagesize($files[$i]->getPathname());
+                    if (!$type) return $responseService->buildErrorResponse(404, "File is not image...");
+
+                    try {
+                        $link = $awcS3Service->savePicture($user->getLogin(), $fileName, $contents, $s3);
+                        $contentsMin = $this->resizeImage($files[$i]->getPathname(), 150, 150);
+                        $linkMin = $awcS3Service->savePicture($user->getLogin(), $fileNameMin, $contentsMin, $s3);
+                    } catch (\Exception $e) {
+                        return $responseService->buildErrorResponse(500, $e->getMessage());
+                    }
+
+                    $createAt = \DateTime::createFromFormat('U', time());
+                    $createAt->setTimezone(new \DateTimeZone('UTC'));
+
+                    $picture = new Picture();
+                    $picture->setUserId($user->getId());
+                    $picture->setName($names[$i]);
+                    $picture->setDescription($descs[$i]);
+                    $picture->setS3link($link);
+                    $picture->setS3minlink($linkMin);
+                    $picture->setCoord($coords[$i]);
+                    $picture->setCreatedAt($createAt);
+                    $manager->persist($picture);
+                    $manager->flush();
+                }
+
+                return $responseService->buildOkResponse(["ok"]);
             } catch (\Exception $e) {
-                return $responseService->buildErrorResponse(500, $e->getMessage());
+                return $responseService->buildErrorResponse(404, "Pictures upload failed... ERROR:" . $e->getMessage());
             }
-
-            $createAt = \DateTime::createFromFormat('U', time() );
-            $createAt->setTimezone(new \DateTimeZone('UTC'));
-
-            $picture = new Picture();
-            $picture->setUserId($user->getId());
-            $picture->setName($attributes['name']);
-            $picture->setDescription($attributes['desc']);
-            $picture->setS3link($link);
-            $picture->setS3minlink($linkMin);
-            $picture->setCoord($attributes['coord']);
-            $picture->setCreatedAt($createAt);
-            $manager->persist($picture);
-            $manager->flush();
-
-            return $responseService->buildOkResponse([$method, $access, $fileName, $link, $type]);
 
         /**
          * GET

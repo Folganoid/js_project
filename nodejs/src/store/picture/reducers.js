@@ -12,9 +12,9 @@ const defaultState = {
     pictureMin: [],
     pictureOne: "",
     pictureMinMode: "min",
-    pictureName: "",
-    pictureDesc: "",
-    pictureCoord: "",
+    pictureName: [],
+    pictureDesc: [],
+    pictureCoord: [],
     pictureRequestDone: false,
 };
 
