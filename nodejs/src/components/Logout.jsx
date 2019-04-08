@@ -3,6 +3,8 @@ import {setUserLogin, setUserAccess, setUserRefresh} from "../store/user/actions
 import {Redirect} from "react-router-dom";
 import connect from "react-redux/es/connect/connect";
 import {setAlertShow} from "../store/main/actions";
+import {setPictureRequestDone, setPictureMin} from "../store/picture/actions";
+
 
 /**
  * Logout
@@ -17,7 +19,9 @@ class Logout extends React.Component {
         this.props.setUserAccess("");
         this.props.setUserRefresh("");
 
-        this.props.setAlertShow("warning", "Logout...")
+        this.props.setAlertShow("warning", "Logout...");
+        this.props.setPictureRequestDone(false);
+        this.props.setPictureMin([]);
     }
 
     render() {
@@ -41,7 +45,9 @@ const mapDispatchToProps = {
     setUserLogin,
     setUserAccess,
     setUserRefresh,
-    setAlertShow
+    setAlertShow,
+    setPictureRequestDone,
+    setPictureMin
 
 };
 

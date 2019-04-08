@@ -37,7 +37,7 @@ class Picture extends React.Component {
         this.rateToStars = this.rateToStars.bind(this);
         this.setMode = this.setMode.bind(this);
         this.choosePictures = this.choosePictures.bind(this);
-        this.getPictures();
+        if (this.props.userAccess && this.props.userAccess.length > 0) this.getPictures();
     }
 
     rateToStars(rate) {
@@ -132,7 +132,7 @@ class Picture extends React.Component {
         const mode = this.props.pictureMinMode;
         const names = this.props.pictureName;
 
-        if (!this.props.pictureRequestDone) {
+        if (!this.props.pictureRequestDone && this.props.userAccess && this.props.userAccess.length > 0) {
             picturesMinList = <p>Loading...</p>;
         } else {
 
@@ -202,7 +202,7 @@ class Picture extends React.Component {
                 return <div className={"row"} key={key}>
                     <input
                         className="pictureName"
-                        value={names[key]}
+                        defaultValue={names[key]}
                         name="PictureName"
                         type="text"
                         placeholder="No name"
@@ -241,7 +241,7 @@ class Picture extends React.Component {
             <ButtonGroup name="PictureMinMode" aria-label="Basic example">
                 <Button value="min" onClick={this.setMode}>Min</Button>
                 <Button value="max" onClick={this.setMode}>Max</Button>
-            </ButtonGroup>;
+            </ButtonGroup>
 
             <br/>
 

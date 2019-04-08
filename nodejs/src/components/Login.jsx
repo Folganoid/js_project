@@ -15,7 +15,6 @@ class Login extends React.Component {
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.buttonSubmit = this.buttonSubmit.bind(this);
-        this.buttonSubmit2 = this.buttonSubmit2.bind(this);
     }
 
     handleInputChange(event) {
@@ -53,10 +52,6 @@ class Login extends React.Component {
             })
     }
 
-    buttonSubmit2() {
-        this.props.setAlertShow("warning", "!!!!!");
-    }
-
     render() {
 
         if (this.state.redirect) return <div><Redirect to="/" /></div>;
@@ -81,9 +76,6 @@ class Login extends React.Component {
                 />
             </div>
             <button onClick={this.buttonSubmit}>Submit</button>
-            <button onClick={this.buttonSubmit2}>Submit2</button>
-            <button onClick={this.props.eraseAlertShow}>Submit2</button>
-
         </div>
     }
 
