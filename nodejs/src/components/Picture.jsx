@@ -12,7 +12,6 @@ class Picture extends React.Component {
     getPictures = async () => {
         await axios.get(SETUP.symfonyHost + "/picture", {
             headers: {
-                'Content-Type': 'multipart/form-data',
                 'Access': this.props.userAccess,
             }
         }).then((response) => {
@@ -37,6 +36,8 @@ class Picture extends React.Component {
         this.rateToStars = this.rateToStars.bind(this);
         this.setMode = this.setMode.bind(this);
         this.choosePictures = this.choosePictures.bind(this);
+        this.buttonDelete = this.buttonDelete.bind(this);
+
         if (this.props.userAccess && this.props.userAccess.length > 0) this.getPictures();
     }
 
@@ -123,6 +124,28 @@ class Picture extends React.Component {
         })
     }
 
+    async buttonDelete(event) {
+        let formData = new FormData();
+
+        await axios.delete(SETUP.symfonyHost + "/picture", formData, {
+            headers: {
+                'Access': this.props.userAccess,
+                'S3Link': event.target.value,
+            }
+        }).then((response) => {
+
+            this.props.setAlertShow("success", "Picture was deleted successfully...");
+            this.props.setPictureName([]);
+
+            this.getPictures();
+//console.log(response);
+        }).catch((error) => {
+            this.props.setAlertShow("danger", error.toString());
+//console.log(error);
+        })
+
+    }
+
     render() {
 
         let picturesMinList;
@@ -160,6 +183,7 @@ class Picture extends React.Component {
                             <dd><b>{pictureMin[key].name}</b></dd>
                             <dd>{pictureMin[key].description}</dd>
                             <dd>{pictureMin[key].rateCount}</dd>
+                            <button value={pictureMin[key].s3Link} onClick={that.buttonDelete}>X</button>
 
                         </div>
                     </Col>

@@ -121,6 +121,20 @@ class PictureController extends MainController
 
         } else if ($method == "DELETE") {
 
+            $s3Link = $request->files->get('s3Link');
+            $repository = $doctrine->getRepository(Picture::class);
+            $picture = $repository->findOneBy(['s3link' => $s3Link]);
+
+            if ($user->getId() !== $picture->getUserId()) return $responseService->buildErrorResponse(401, "Access denied...");
+
+            try {
+                $deletePic = $awcS3Service->deletePicture($s3Link, $s3);
+                $deletePicMin = $awcS3Service->deletePicture($s3Link, $s3);
+            } catch (\Exception $e) {
+                return $responseService->buildErrorResponse(404, "ERROR: " . $e->getMessage());
+            }
+
+            return $responseService->buildOkResponse(["OK"]);
         }
 
 

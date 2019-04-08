@@ -69,7 +69,6 @@ class AwcS3Service
         ]);
 
         return $res;
-
     }
 
     /**
