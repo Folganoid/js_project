@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Picture;
+use App\Entity\PictureComment;
 use App\Entity\PictureRating;
 use App\Service\AwcS3Service;
 use App\Service\ResponseService;
@@ -118,18 +119,39 @@ class PictureController extends MainController
 
             return $responseService->buildOkResponse($pics);
 
-
+        /**
+         * DELETE
+         */
         } else if ($method == "DELETE") {
 
-            $s3Link = $request->files->get('s3Link');
+            $s3Link = $request->headers->get('S3Link');
             $repository = $doctrine->getRepository(Picture::class);
             $picture = $repository->findOneBy(['s3link' => $s3Link]);
 
+            if (!$picture) return $responseService->buildErrorResponse(404, "Picture not found...");
             if ($user->getId() !== $picture->getUserId()) return $responseService->buildErrorResponse(401, "Access denied...");
 
             try {
                 $deletePic = $awcS3Service->deletePicture($s3Link, $s3);
                 $deletePicMin = $awcS3Service->deletePicture($s3Link, $s3);
+
+                if (!$deletePic || !$deletePicMin) throw new \Exception("Can't delete object from AWS S3...");
+
+                $entityManager = $this->getDoctrine()->getManager();
+
+                $repPicRate = $doctrine->getRepository(PictureRating::class);
+                $rates = $repPicRate->findBy(['picture_id' => $picture->getId()]);
+                foreach ($rates as $oneRate) {
+                    $entityManager->remove($oneRate);
+                }
+                $repPicCom = $doctrine->getRepository(PictureComment::class);
+                $comments = $repPicCom->findBy(['picture_id' => $picture->getId()]);
+                foreach ($comments as $oneCom) {
+                    $entityManager->remove($oneCom);
+                }
+                $entityManager->remove($picture);
+                $entityManager->flush();
+
             } catch (\Exception $e) {
                 return $responseService->buildErrorResponse(404, "ERROR: " . $e->getMessage());
             }

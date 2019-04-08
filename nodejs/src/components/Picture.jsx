@@ -125,9 +125,8 @@ class Picture extends React.Component {
     }
 
     async buttonDelete(event) {
-        let formData = new FormData();
 
-        await axios.delete(SETUP.symfonyHost + "/picture", formData, {
+        await axios.delete(SETUP.symfonyHost + "/picture", {
             headers: {
                 'Access': this.props.userAccess,
                 'S3Link': event.target.value,
