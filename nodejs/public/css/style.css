@@ -26,3 +26,15 @@
     font-size: 0.8em;
     line-height: 10px;
 }
+
+.buttonDeletePicture {
+    position: relative;
+    margin-bottom: -65px;
+    margin-left: 110px;
+}
+
+.modalSetCoord {
+    position: fixed;
+    top: 30%;
+    z-index: 100;
+}

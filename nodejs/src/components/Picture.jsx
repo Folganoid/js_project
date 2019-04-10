@@ -2,12 +2,29 @@ import React from 'react';
 import axios from "axios";
 import SETUP from "../config";
 import {Link} from "react-router-dom";
-import {Row, Col, Button, ButtonGroup} from "react-bootstrap";
+import {Row, Col, Button, ButtonGroup, Modal} from "react-bootstrap";
 
 /**
  * Picture
  */
 class Picture extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+        this.changePictureMin = this.changePictureMin.bind(this);
+        this.buttonSend = this.buttonSend.bind(this);
+        this.buttonDelete = this.buttonDelete.bind(this);
+        this.buttonSetCoord = this.buttonSetCoord.bind(this);
+        this.modalClose = this.modalClose.bind(this);
+        this.rateToStars = this.rateToStars.bind(this);
+        this.setMode = this.setMode.bind(this);
+        this.choosePictures = this.choosePictures.bind(this);
+
+        this.state = { modalCoordKey: 0};
+
+        if (this.props.userAccess && this.props.userAccess.length > 0) this.getPictures();
+    }
 
     getPictures = async () => {
         await axios.get(SETUP.symfonyHost + "/picture", {
@@ -20,26 +37,13 @@ class Picture extends React.Component {
             this.props.setPictureRequestDone(true);
 //console.log(response.data);
         })
-        .catch(error => {
+            .catch(error => {
                 this.changePictureMin([]);
                 this.props.setAlertShow("warning", "Pictures not found");
                 this.props.setPictureRequestDone(true);
 //console.log(error);
             });
     };
-
-    constructor(props) {
-        super(props);
-
-        this.changePictureMin = this.changePictureMin.bind(this);
-        this.buttonSend = this.buttonSend.bind(this);
-        this.rateToStars = this.rateToStars.bind(this);
-        this.setMode = this.setMode.bind(this);
-        this.choosePictures = this.choosePictures.bind(this);
-        this.buttonDelete = this.buttonDelete.bind(this);
-
-        if (this.props.userAccess && this.props.userAccess.length > 0) this.getPictures();
-    }
 
     rateToStars(rate) {
 
@@ -145,6 +149,16 @@ class Picture extends React.Component {
 
     }
 
+    buttonSetCoord(event) {
+        this.setState({modalCoordKey: event.target.value});
+        this.props.setPictureModalOn(true);
+    }
+
+    modalClose() {
+        console.log("++");
+        this.props.setPictureModalOn(false);
+    }
+
     render() {
 
         let picturesMinList;
@@ -153,6 +167,23 @@ class Picture extends React.Component {
 
         const mode = this.props.pictureMinMode;
         const names = this.props.pictureName;
+
+        let modal = (this.props.pictureModalOn) ? <div className={"modalSetCoord"}>
+            <Modal.Dialog>
+                <Modal.Header>
+                    <Modal.Title>{names[this.state.modalCoordKey]}</Modal.Title>
+                </Modal.Header>
+
+                <Modal.Body>
+                    <p>Modal body text goes here.</p>
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button onClick={that.modalClose}>Close</Button>
+                    <Button variant="primary">Save changes</Button>
+                </Modal.Footer>
+            </Modal.Dialog>
+        </div> : <div className={"modalSetCoord"}></div>;
 
         if (!this.props.pictureRequestDone && this.props.userAccess && this.props.userAccess.length > 0) {
             picturesMinList = <p>Loading...</p>;
@@ -169,6 +200,7 @@ class Picture extends React.Component {
                 if (mode === "min") {
                     return <Col xs={4} md={3} lg={2} className="thumbnail" key={key}>
 
+                        <Button className={"buttonDeletePicture"} value={pictureMin[key].s3Link} onClick={that.buttonDelete} variant="outline-danger">X</Button>
                         <Link to={`/pictures/${pictureMin[key].s3Link}`}>
                             <img
                                 style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
@@ -182,8 +214,6 @@ class Picture extends React.Component {
                             <dd><b>{pictureMin[key].name}</b></dd>
                             <dd>{pictureMin[key].description}</dd>
                             <dd>{pictureMin[key].rateCount}</dd>
-                            <button value={pictureMin[key].s3Link} onClick={that.buttonDelete}>X</button>
-
                         </div>
                     </Col>
                 } else if (mode === "max") {
@@ -192,6 +222,7 @@ class Picture extends React.Component {
                             <tbody>
                             <tr>
                                 <td>
+                                    <Button className={"buttonDeletePicture"} value={pictureMin[key].s3Link} onClick={that.buttonDelete} variant="outline-danger">X</Button>
                                     <Link to={`/pictures/${pictureMin[key].s3Link}`}>
                                         <img
                                             style={{display: 'block', maxWidth: '150px', maxHeight: '150px'}}
@@ -242,6 +273,9 @@ class Picture extends React.Component {
                         type="text"
                         placeholder="No coordinates"
                     />
+                    <Button value={key} onClick={that.buttonSetCoord} variant="outline-info">O</Button>
+                    {modal}
+
                 </div>
             });
         } else {

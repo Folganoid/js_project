@@ -5,7 +5,8 @@ import {
     PICTURE_CHANGE_NAME,
     PICTURE_CHANGE_DESC,
     PICTURE_CHANGE_COORD,
-    PICTURE_REQUEST_DONE
+    PICTURE_REQUEST_DONE,
+    PICTURE_MODAL_ON,
 } from "./actions";
 
 const defaultState = {
@@ -16,6 +17,7 @@ const defaultState = {
     pictureDesc: [],
     pictureCoord: [],
     pictureRequestDone: false,
+    pictureModalOn: false,
 };
 
 export const pictureReducer = (state = defaultState, action) => {
@@ -36,6 +38,8 @@ export const pictureReducer = (state = defaultState, action) => {
 
         case PICTURE_REQUEST_DONE:
             return {...state, pictureRequestDone: action.payload};
+        case PICTURE_MODAL_ON:
+            return {...state, pictureModalOn: action.payload};
         default:
             return state;
     }

@@ -5,6 +5,7 @@ export const PICTURE_CHANGE_DESC = 'PICTURE_CHANGE_DESC';
 export const PICTURE_CHANGE_COORD = 'PICTURE_CHANGE_COORD';
 export const PICTURE_CHANGE_PICTURE_ONE = 'PICTURE_CHANGE_PICTURE_ONE';
 export const PICTURE_REQUEST_DONE = 'PICTURE_REQUEST_DONE';
+export const PICTURE_MODAL_ON = 'PICTURE_MODAL_ON';
 
 export const setPictureMin = (newPicture) => {
     return {
@@ -52,5 +53,12 @@ export const setPictureRequestDone = (ok) => {
     return {
         type: PICTURE_REQUEST_DONE,
         payload: ok
+    }
+};
+
+export const setPictureModalOn = (on) => {
+    return {
+        type: PICTURE_MODAL_ON,
+        payload: on
     }
 };

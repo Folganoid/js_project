@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import Picture from "./Picture";
-import {setPictureMin, setPictureMinMode, setPictureName, setPictureDesc, setPictureCoord, setPictureRequestDone} from "../store/picture/actions";
+import {setPictureMin, setPictureMinMode, setPictureName, setPictureDesc, setPictureCoord, setPictureRequestDone, setPictureModalOn} from "../store/picture/actions";
 import {setAlertShow} from "../store/main/actions";
 
 class PictureContainer extends React.Component {
@@ -15,6 +15,7 @@ class PictureContainer extends React.Component {
             pictureDesc={this.props.pictureDesc}
             pictureCoord={this.props.pictureCoord}
             pictureRequestDone={this.props.pictureRequestDone}
+            pictureModalOn={this.props.pictureModalOn}
 
             setPictureMin={this.props.setPictureMin}
             setPictureMinMode={this.props.setPictureMinMode}
@@ -24,6 +25,7 @@ class PictureContainer extends React.Component {
 
             setAlertShow={this.props.setAlertShow}
             setPictureRequestDone={this.props.setPictureRequestDone}
+            setPictureModalOn={this.props.setPictureModalOn}
         />;
 
     }
@@ -39,6 +41,7 @@ const mapStateToProps = state => {
         pictureDesc: state.picture.pictureDesc,
         pictureCoord: state.picture.pictureCoord,
         pictureRequestDone: state.picture.pictureRequestDone,
+        pictureModalOn: state.picture.pictureModalOn,
     };
 };
 
@@ -50,6 +53,7 @@ const mapDispatchToProps = {
     setPictureCoord,
     setAlertShow,
     setPictureRequestDone,
+    setPictureModalOn
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PictureContainer);
