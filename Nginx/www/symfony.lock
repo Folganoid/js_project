@@ -117,6 +117,24 @@
     "fig/link-util": {
         "version": "1.0.0"
     },
+    "firebase/php-jwt": {
+        "version": "v5.0.0"
+    },
+    "google/apiclient": {
+        "version": "2.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "2.0",
+            "ref": "49c5d7a66d863d28513979bf0666dc77599100c0"
+        }
+    },
+    "google/apiclient-services": {
+        "version": "v0.93"
+    },
+    "google/auth": {
+        "version": "v1.4.0"
+    },
     "guzzlehttp/guzzle": {
         "version": "6.3.3"
     },
@@ -128,6 +146,21 @@
     },
     "jdorn/sql-formatter": {
         "version": "v1.2.17"
+    },
+    "knpuniversity/oauth2-client-bundle": {
+        "version": "1.20",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "master",
+            "version": "1.20",
+            "ref": "80acc9223a205cbf5d9828fd616c82a374d281dd"
+        }
+    },
+    "league/oauth2-client": {
+        "version": "2.4.1"
+    },
+    "league/oauth2-google": {
+        "version": "3.0.1"
     },
     "monolog/monolog": {
         "version": "1.24.0"
@@ -161,6 +194,9 @@
     },
     "phpdocumentor/type-resolver": {
         "version": "0.4.0"
+    },
+    "phpseclib/phpseclib": {
+        "version": "2.0.15"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -403,6 +439,30 @@
             "config/packages/test/routing.yaml",
             "config/routes.yaml"
         ]
+    },
+    "symfony/security-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "f8a63faa0d9521526499c0a8f403c9964ecb0527"
+        },
+        "files": [
+            "config/packages/security.yaml"
+        ]
+    },
+    "symfony/security-core": {
+        "version": "v4.2.5"
+    },
+    "symfony/security-csrf": {
+        "version": "v4.2.5"
+    },
+    "symfony/security-guard": {
+        "version": "v4.2.5"
+    },
+    "symfony/security-http": {
+        "version": "v4.2.5"
     },
     "symfony/serializer": {
         "version": "v4.2.3"
