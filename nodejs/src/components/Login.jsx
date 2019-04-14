@@ -11,10 +11,27 @@ class Login extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = { redirect: false };
+        this.state = {
+            redirect: false
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.buttonSubmit = this.buttonSubmit.bind(this);
+        this.buttonGoogle = this.buttonGoogle.bind(this);
+        this.getParam = this.getParam.bind(this);
+
+        if (this.getParam('login') && this.getParam('access') && this.getParam('refresh')) {
+            this.props.setUserLogin(atob(this.getParam('login')));
+            this.props.setUserAccess(this.getParam('access'));
+            this.props.setUserRefresh(this.getParam('refresh'));
+            this.state = {redirect: true};
+            this.props.setAlertShow("success", "Hello " + this.props.login + ", you login successfully...");
+        }
+    }
+
+    getParam(name){
+        if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(window.location.search))
+            return decodeURIComponent(name[1]);
     }
 
     handleInputChange(event) {
@@ -52,6 +69,10 @@ class Login extends React.Component {
             })
     }
 
+    buttonGoogle() {
+        window.location = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3001/google/callback&response_type=code&client_id=65172008383-02q16rvu3sd588vuvhq5fu5pgej6jshs.apps.googleusercontent.com";
+    }
+
     render() {
 
         if (this.state.redirect) return <div><Redirect to="/" /></div>;
@@ -76,6 +97,7 @@ class Login extends React.Component {
                 />
             </div>
             <button onClick={this.buttonSubmit}>Submit</button>
+            <button onClick={this.buttonGoogle}>Login by Google</button>
         </div>
     }
 

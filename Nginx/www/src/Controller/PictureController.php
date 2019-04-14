@@ -52,9 +52,9 @@ class PictureController extends MainController
                     if (!$type) return $responseService->buildErrorResponse(404, "File is not image...");
 
                     try {
-                        $link = $awcS3Service->savePicture($user->getLogin(), $fileName, $contents, $s3);
+                        $link = $awcS3Service->savePicture(strtolower(base64_encode($user->getLogin())), $fileName, $contents, $s3);
                         $contentsMin = $this->resizeImage($files[$i]->getPathname(), 150, 150);
-                        $linkMin = $awcS3Service->savePicture($user->getLogin(), $fileNameMin, $contentsMin, $s3);
+                        $linkMin = $awcS3Service->savePicture(strtolower(base64_encode($user->getLogin())), $fileNameMin, $contentsMin, $s3);
                     } catch (\Exception $e) {
                         return $responseService->buildErrorResponse(500, $e->getMessage());
                     }
@@ -74,9 +74,9 @@ class PictureController extends MainController
                     $manager->flush();
                 }
 
-                return $responseService->buildOkResponse(["ok"]);
+                return $responseService->buildOkResponse([base64_encode($user->getLogin())]);
             } catch (\Exception $e) {
-                return $responseService->buildErrorResponse(404, "Pictures upload failed... ERROR:" . $e->getMessage());
+                return $responseService->buildErrorResponse(404, "Pictures upload failed... ERROR:" . $e->getMessage().base64_encode($user->getLogin()));
             }
 
         /**

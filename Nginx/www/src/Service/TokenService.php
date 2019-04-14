@@ -19,13 +19,14 @@ class TokenService
     /**
      * generate token string
      *
+     * @param int $length
      * @return string
      * @throws \Exception
      */
-    public function generateToken():string
+    public function generateToken(int $length = 255):string
     {
-        $rand = bin2hex(random_bytes(255));
-        return substr($rand, 0, 255);
+        $rand = bin2hex(random_bytes($length));
+        return substr($rand, 0, $length);
     }
 
     public function generatePass($string): string
