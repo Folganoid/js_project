@@ -1,6 +1,6 @@
 FROM node:8.9-alpine as adonis
 
-WORKDIR . /adonis
+WORKDIR . /app
 COPY package*.json ./
 RUN npm install
 COPY . .
