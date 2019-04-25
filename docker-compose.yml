@@ -12,7 +12,6 @@ services:
             - ./Nginx/core:/etc/nginx/conf.d
             - ./Nginx/www:/var/www/
             - ./Nginx/www2:/var/www2/
-            - ./Nginx/www3:/var/www3/
             - ./Nginx/Logs:/var/log/nginx/
             - ./Nginx/html:/usr/share/nginx/html/
         links:
@@ -81,21 +80,6 @@ services:
        networks:
           - webappnetwork      
             
-    adonis:
-        build: ./adonis
-        environment:
-           - NODE_ENV=production
-        links:
-           - nginx
-        volumes:
-           - ./adonis:/adonis
-        command: npm start
-        ports:
-           - 3333:3333
-        networks:
-            - webappnetwork
-
-
 networks:
    webappnetwork:
       driver: bridge

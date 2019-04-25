@@ -1,8 +1,8 @@
 FROM node:8.9-alpine as adonis
 
-WORKDIR . /app
+WORKDIR . /adonis
 COPY package*.json ./
 RUN npm install
 COPY . .
-EXPOSE 8080
+EXPOSE 3333
 CMD [ "npm", "start" ]
