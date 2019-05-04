@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PictureOne from "./PictureOne";
+import PictureOne from "./PictureOne.jsx";
 import {setPictureOne} from "../store/picture/actions";
 import {setAlertShow} from "../store/main/actions";
 

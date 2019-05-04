@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Login from "./Login";
+import Login from "./Login.jsx";
 import {setLogin, setPassword} from "../store/login/actions";
 import {setUserLogin, setUserAccess, setUserRefresh} from "../store/user/actions";
 import {setAlertShow, eraseAlertShow} from "../store/main/actions";

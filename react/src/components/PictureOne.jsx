@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import SETUP from "../config";
+import SETUP from "../config.jsx";
 
 class PictureOne extends React.Component {
 
@@ -17,8 +17,8 @@ class PictureOne extends React.Component {
         this.props.setPictureOne(body);
     }
 
-    getPicture = async (bucket, key) => {
-        await axios.get(SETUP.symfonyHost + "/picture/" + bucket + "/" + key, {
+    getPicture(bucket, key) {
+        axios.get(SETUP.symfonyHost + "/picture/" + bucket + "/" + key, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Access': this.props.userAccess,

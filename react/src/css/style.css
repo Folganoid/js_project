@@ -1,0 +1,40 @@
+.footer {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+}
+
+.pictureMin {
+    width: 100%;
+}
+
+.pictureMinBody {
+    width: 150px;
+    height: 150px;
+}
+
+.thumbnail {
+    padding: 5px;
+}
+
+.thumbnail:hover {
+    background-color: aliceblue;
+}
+
+.thumbnail_text {
+    padding-top: 5px;
+    font-size: 0.8em;
+    line-height: 10px;
+}
+
+.buttonDeletePicture {
+    position: relative;
+    margin-bottom: -65px;
+    margin-left: 110px;
+}
+
+.modalSetCoord {
+    position: fixed;
+    top: 30%;
+    z-index: 100;
+}

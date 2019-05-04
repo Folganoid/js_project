@@ -13,7 +13,6 @@ use Symfony\Component\Config\Definition\Exception\Exception;
 
 class AwcS3Service
 {
-
     /**
      * save picture to s3
      *
@@ -24,7 +23,7 @@ class AwcS3Service
      * @return string
      * @throws \Exception
      */
-    public function savePicture(string $bucket, string $fileName, $fileBody, S3Client $s3): string {
+    public function savePicture(string $bucket, string $fileName, $fileBody, S3Client $s3) {
 
         $isExistBucket = $s3->doesBucketExist($bucket);
         if (!$isExistBucket) $s3->createBucket(['Bucket' => $bucket]);

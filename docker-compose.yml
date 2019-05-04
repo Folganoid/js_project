@@ -49,14 +49,14 @@ services:
         networks:
             - webappnetwork
 
-    nodejs:
-        build: ./nodejs
+    react:
+        build: ./react
         environment:
            - NODE_ENV=production
         links:
            - nginx
         volumes:
-           - ./nodejs:/var/www2
+           - ./react:/var/www2
         command: npm start
         ports:
            - 3000:3000

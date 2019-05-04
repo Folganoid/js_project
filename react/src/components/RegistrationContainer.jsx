@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {setLogin, setEmail, setPassword, setPassword2} from "../store/registration/actions";
-import Registration from "./Registration";
+import Registration from "./Registration.jsx";
 import {setUserAccess, setUserLogin, setUserRefresh} from "../store/user/actions";
 import {setAlertShow} from "../store/main/actions";
 

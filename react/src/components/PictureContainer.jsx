@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import Picture from "./Picture";
+import Picture from "./Picture.jsx";
 import {setPictureMin, setPictureMinMode, setPictureName, setPictureDesc, setPictureCoord, setPictureRequestDone, setPictureModalOn} from "../store/picture/actions";
 import {setAlertShow} from "../store/main/actions";
 

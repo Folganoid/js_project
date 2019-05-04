@@ -1,37 +1,20 @@
 import React from 'react';
-import axios from 'axios';
+import axios from "axios";
+import SETUP from "../config.jsx";
 import {Redirect} from "react-router-dom";
-import SETUP from '../config';
 
 /**
- * Login
+ * Register
  */
-class Login extends React.Component {
+class Registration extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            redirect: false
-        };
+        this.state = { redirect: false };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.buttonSubmit = this.buttonSubmit.bind(this);
-        this.buttonGoogle = this.buttonGoogle.bind(this);
-        this.getParam = this.getParam.bind(this);
-
-        if (this.getParam('login') && this.getParam('access') && this.getParam('refresh')) {
-            this.props.setUserLogin(atob(this.getParam('login')));
-            this.props.setUserAccess(this.getParam('access'));
-            this.props.setUserRefresh(this.getParam('refresh'));
-            this.state = {redirect: true};
-            this.props.setAlertShow("success", "Hello " + this.props.login + ", you login successfully...");
-        }
-    }
-
-    getParam(name){
-        if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(window.location.search))
-            return decodeURIComponent(name[1]);
     }
 
     handleInputChange(event) {
@@ -44,11 +27,12 @@ class Login extends React.Component {
 
     buttonSubmit() {
 
-        var headers = {
+        let headers = {
             'Login': this.props.login,
+            'Email': this.props.email,
             'Password': this.props.password,
         };
-        axios.post( SETUP.symfonyHost + "/token/generate", "", {headers: headers})
+        axios.post( SETUP.symfonyHost + "/registration", "", {headers: headers})
 
             .then((response) => {
                 localStorage.clear();
@@ -57,7 +41,7 @@ class Login extends React.Component {
                     this.props.setUserAccess(response['data']["accessToken"]);
                     this.props.setUserRefresh(response['data']["refreshToken"]);
                     this.setState({redirect: true});
-                    this.props.setAlertShow("success", "Hello " + this.props.login + ", you login successfully...");
+                    this.props.setAlertShow("success", "User " + this.props.login + "registered successfully...");
                 }
 
 //console.log(response);
@@ -67,10 +51,6 @@ class Login extends React.Component {
                 this.props.setAlertShow("danger", error.toString());
 //console.log(error);
             })
-    }
-
-    buttonGoogle() {
-        window.location = "https://accounts.google.com/o/oauth2/v2/auth?scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fdrive.metadata.readonly&include_granted_scopes=true&state=state_parameter_passthrough_value&redirect_uri=http://localhost:3001/google/callback&response_type=code&client_id=65172008383-02q16rvu3sd588vuvhq5fu5pgej6jshs.apps.googleusercontent.com";
     }
 
     render() {
@@ -85,6 +65,17 @@ class Login extends React.Component {
                     onChange={this.handleInputChange}
                     type="text"
                     placeholder="Login"
+
+                />
+            </div>
+            <div>
+                <input
+                    value={this.props.email}
+                    name="Email"
+                    onChange={this.handleInputChange}
+                    type="text"
+                    placeholder="Email"
+
                 />
             </div>
             <div>
@@ -94,13 +85,23 @@ class Login extends React.Component {
                     onChange={this.handleInputChange}
                     type="text"
                     placeholder="Password"
+
+                />
+            </div>
+            <div>
+                <input
+                    value={this.props.password2}
+                    name="Password2"
+                    onChange={this.handleInputChange}
+                    type="text"
+                    placeholder="Confirm password"
+
                 />
             </div>
             <button onClick={this.buttonSubmit}>Submit</button>
-            <button onClick={this.buttonGoogle}>Login by Google</button>
         </div>
     }
 
 }
 
-export default Login
+export default Registration

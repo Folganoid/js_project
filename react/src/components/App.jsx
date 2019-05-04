@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import {createStore, applyMiddleware} from 'redux';
-import rootReducer from "./store/reducers";
-import {Provider} from 'react-redux'
-import Router from "./components/Router"
+import rootReducer from "../store/reducers";
+import {Provider} from 'react-redux';
+import Router from "./Router.jsx";
+
+import '../css/style.css';
 
 // middleware
 const logger = store => next => action => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from "axios";
-import SETUP from "../config";
+import SETUP from "../config.jsx";
 import {Link} from "react-router-dom";
 import {Row, Col, Button, ButtonGroup, Modal} from "react-bootstrap";
 
@@ -26,7 +26,7 @@ class Picture extends React.Component {
         if (this.props.userAccess && this.props.userAccess.length > 0) this.getPictures();
     }
 
-    getPictures = async () => {
+    async getPictures() {
         await axios.get(SETUP.symfonyHost + "/picture", {
             headers: {
                 'Access': this.props.userAccess,

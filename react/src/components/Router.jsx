@@ -3,16 +3,15 @@ import {Nav, Navbar} from "react-bootstrap";
 import {LinkContainer} from "react-router-bootstrap";
 import {BrowserRouter, Route, Switch} from "react-router-dom";
 
-import LoginContainer from "./LoginContainer";
-import RegistrationContainer from "./RegistrationContainer";
-import PictureContainer from "./PictureContainer";
-import PictureOneContainer from "./PictureOneContainer";
-
-import Logout from "./Logout";
+import LoginContainer from "./LoginContainer.jsx";
+import RegistrationContainer from "./RegistrationContainer.jsx";
+import PictureContainer from "./PictureContainer.jsx";
+import PictureOneContainer from "./PictureOneContainer.jsx";
+import Logout from "./Logout.jsx";
 import Card from "react-bootstrap/es/Card";
 import connect from "react-redux/es/connect/connect";
 import {eraseAlertShow} from "../store/main/actions";
-import AlertShow from "./AlertShow";
+import AlertShow from "./AlertShow.jsx";
 
 /**
  * Logout
